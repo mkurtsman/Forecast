@@ -16,4 +16,16 @@ public abstract class ParametricFunction<T, R> implements Function<T, R> {
         return params.get(num);
     }
 
+    public int getParamsCount(){
+        return params.size();
+    }
+
+
+    public String paramsString() {
+        StringBuilder builder = new StringBuilder("params: ");
+        for (int i = 0 ; i < params.size(); i++){
+            builder.append("p").append(i).append("=").append(params.get(i)).append(" ");
+        }
+        return builder.toString();
+    }
 }

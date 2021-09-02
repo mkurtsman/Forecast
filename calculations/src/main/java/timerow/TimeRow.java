@@ -5,9 +5,10 @@ import functions.ParametricFunction;
 import java.util.*;
 import java.util.stream.Collectors;
 
-abstract public class TimeRow<X, Y extends Number> {
+abstract public class
+TimeRow<X, Y extends Number> {
 
-    private SortedMap<X, Y> points = new TreeMap<>();
+    SortedMap<X, Y> points = new TreeMap<>();
 
     protected TimeRow(){
     }
@@ -44,6 +45,8 @@ abstract public class TimeRow<X, Y extends Number> {
         points.forEach((x, y) -> newRow.points.put(x, subtract(y, added.points.get(x))));
         return newRow;
     }
+
+    abstract public Double minSquare(ParametricFunction<X, Y> function);
 
     abstract protected Y add(Y v1, Y v2);
 
