@@ -26,7 +26,7 @@ public class ParamFuncOptimizer<X, Y extends Number> {
         Double prewError = Double.MAX_VALUE;
         int cnt = 0;
         while (prewError - error > eps) {
-            for (int i = 0; i < initSteps.size(); i++) {
+            for (int i = 0; i < function.getParamsCount(); i++) {
                 optimizeByParam(i, function, 0);
             }
             prewError = error;

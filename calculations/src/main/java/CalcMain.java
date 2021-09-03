@@ -1,5 +1,7 @@
 import functions.LineFunction;
 import functions.LineFunctionNoise;
+import functions.SinFunction;
+import functions.SinFunctionNoise;
 import optimizer.ParamFuncOptimizer;
 import timerow.DoubleRow;
 import timerow.TimeRow;
@@ -14,12 +16,12 @@ public class CalcMain {
             x[i] = i;
         }
 
-        LineFunctionNoise lineFunctionNoise = new LineFunctionNoise(5, 34, 12, 5);
+//        LineFunctionNoise lineFunctionNoise = new LineFunctionNoise(5, 34, 12);
+        SinFunctionNoise sinFunctionNoise = new SinFunctionNoise(1000, List.of(2.0, 3.1, 5.8, 3.1, 2.1), 100);
+        TimeRow<Integer, Double> row = new DoubleRow(x, sinFunctionNoise);
 
-        TimeRow<Integer, Double> row = new DoubleRow(x, lineFunctionNoise);
-
-        LineFunction lineFunction = new LineFunction(5.5, 30, 13);
-        ParamFuncOptimizer<Integer, Double> optimizer = new ParamFuncOptimizer<>(lineFunction, List.of(100.0,100.0,100.0),0.000001, row);
+        SinFunction sinFunction = new SinFunction(1000, List.of(10., 10., 10., 10., 10.));
+        ParamFuncOptimizer<Integer, Double> optimizer = new ParamFuncOptimizer<>(sinFunction, List.of(100.0,100.0,100.0,100.0,100.0),0.0000001, row);
         optimizer.optimize();
 
 
