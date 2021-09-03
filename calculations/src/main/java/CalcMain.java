@@ -17,7 +17,7 @@ public class CalcMain {
         }
 
 //        LineFunctionNoise lineFunctionNoise = new LineFunctionNoise(5, 34, 12);
-        SinFunctionNoise sinFunctionNoise = new SinFunctionNoise(1000, List.of(2.0, 3.1, 5.8, 3.1, 2.1), 100);
+        SinFunctionNoise sinFunctionNoise = new SinFunctionNoise(1000, List.of(2.0, 3.1, 5.8, 3.1, 2.1), 10);
         TimeRow<Integer, Double> row = new DoubleRow(x, sinFunctionNoise);
 
         SinFunction sinFunction = new SinFunction(1000, List.of(10., 10., 10., 10., 10.));

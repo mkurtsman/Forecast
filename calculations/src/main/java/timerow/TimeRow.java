@@ -25,6 +25,14 @@ TimeRow<X, Y extends Number> {
         }
     }
 
+    public void set(X i, Y sum) {
+        this.points.put(i, sum);
+    }
+
+    public Y get(X x){
+        return points.get(x);
+    }
+
     public List<X> getXes(){
         return new ArrayList<>(points.keySet());
     }
@@ -35,16 +43,23 @@ TimeRow<X, Y extends Number> {
 
 
     public TimeRow<X, Y> add(TimeRow<X, Y> added){
-        TimeRow<X, Y> newRow = newEmpty(this);
+        TimeRow<X, Y> newRow = newEmpty();
         points.forEach((x, y) -> newRow.points.put(x, add(y, added.points.get(x))));
         return newRow;
     }
 
     public TimeRow<X, Y> subtract(TimeRow<X, Y> added){
-        TimeRow<X, Y> newRow = newEmpty(this);
+        TimeRow<X, Y> newRow = newEmpty();
         points.forEach((x, y) -> newRow.points.put(x, subtract(y, added.points.get(x))));
         return newRow;
     }
+
+    public TimeRow<X, Y> copy(){
+        TimeRow<X, Y> newRow = newEmpty();
+        newRow.points.putAll(this.points);
+        return newRow;
+    }
+
 
     abstract public Double minSquare(ParametricFunction<X, Y> function);
 
@@ -52,6 +67,7 @@ TimeRow<X, Y extends Number> {
 
     abstract protected Y subtract(Y v1, Y v2);
 
-    abstract protected TimeRow<X, Y> newEmpty(TimeRow<X, Y> original);
+    abstract protected TimeRow<X, Y> newEmpty();
+
 
 }

@@ -18,7 +18,7 @@ public class DoubleRow extends TimeRow<Integer, Double> {
     @Override
     public Double minSquare(ParametricFunction<Integer, Double> function) {
         double sum = this.points.entrySet().stream().mapToDouble(p -> Math.pow(p.getValue() - function.apply(p.getKey()),2)).sum();
-        return Math.sqrt(sum);
+        return Math.sqrt(sum/points.size());
     }
 
     @Override
@@ -32,7 +32,7 @@ public class DoubleRow extends TimeRow<Integer, Double> {
     }
 
     @Override
-    protected TimeRow<Integer, Double> newEmpty(TimeRow<Integer, Double> original) {
+    protected TimeRow<Integer, Double> newEmpty() {
         return new DoubleRow();
     }
 }
