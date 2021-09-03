@@ -28,4 +28,6 @@ public abstract class ParametricFunction<T, R> implements Function<T, R> {
         }
         return builder.toString();
     }
+
+    public abstract int from();
 }

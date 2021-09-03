@@ -12,4 +12,8 @@ public class LineFunction extends ParametricFunction<Integer, Double> {
         return params.get(0) + params.get(1) * arg;
     }
 
+    @Override
+    public int from() {
+        return 0;
+    }
 }

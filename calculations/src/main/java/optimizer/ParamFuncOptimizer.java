@@ -6,6 +6,8 @@ import timerow.TimeRow;
 import java.util.ArrayList;
 import java.util.List;
 
+import static java.lang.Math.abs;
+
 public class ParamFuncOptimizer<X, Y extends Number> {
     private ParametricFunction<X, Y> function;
     private List<Double> initSteps;
@@ -25,7 +27,7 @@ public class ParamFuncOptimizer<X, Y extends Number> {
         Double error = timeRow.minSquare(function);
         Double prewError = Double.MAX_VALUE;
         int cnt = 0;
-        while (prewError - error > eps) {
+        while (abs(prewError - error) > eps) {
             for (int i = 0; i < function.getParamsCount(); i++) {
                 optimizeByParam(i, function, 0);
             }

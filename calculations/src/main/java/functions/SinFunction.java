@@ -19,4 +19,9 @@ public class SinFunction extends ParametricFunction<Integer, Double>{
         double a = 2 * PI * x / count;
         return IntStream.range(0,params.size()).mapToDouble(i -> params.get(i)*sin(a*(i+1)*x)).sum();
     }
+
+    @Override
+    public int from() {
+        return 0;
+    }
 }
