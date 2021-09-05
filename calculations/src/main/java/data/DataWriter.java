@@ -28,12 +28,12 @@ public class DataWriter {
 
     public void write() throws IOException {
         DataConfig config = new DataConfig();
-        config.setLabelX(IntStream.range(0, 11).mapToObj(Integer::toString).collect(Collectors.toList()).toArray(new String[]{}));
+        config.setLabelX(IntStream.range(0, 13).mapToObj(Integer::toString).collect(Collectors.toList()).toArray(new String[]{}));
         var min = data.getYes().stream().min(Double::compareTo).orElse(0.0);
         var max = data.getYes().stream().max(Double::compareTo).orElse(0.0);
         config.setLabelY(IntStream.range(0, 11).mapToObj(Integer::toString).collect(Collectors.toList()).toArray(new String[]{}));
         String y[] = new String[11];
-        for(int i = 0; i <= 10; i++){
+        for(int i = 0; i <= y.length -1; i++){
             var d = min + (max - min)*i/(y.length -1);
             y[i] = df.format(d);
         }
