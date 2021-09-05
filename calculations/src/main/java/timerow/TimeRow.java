@@ -13,6 +13,10 @@ TimeRow<X, Y extends Number> {
     protected TimeRow(){
     }
 
+    protected TimeRow(SortedMap<X, Y> points ){
+        this.points.putAll(points);
+    }
+
     public TimeRow(X[] xes, Y[] ys){
         for(int i = 0; i< xes.length; i++){
             points.put(xes[i], ys[i]);
@@ -70,7 +74,6 @@ TimeRow<X, Y extends Number> {
         newRow.points.putAll(this.points);
         return newRow;
     }
-
 
     abstract public Double minSquare(ParametricFunction<X, Y> function);
 
