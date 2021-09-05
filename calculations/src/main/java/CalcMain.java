@@ -1,47 +1,43 @@
+import data.DataLoader;
+import data.DataWriter;
+import data.read.Model;
 import functions.*;
 import optimizer.ParamFuncOptimizer;
 import timerow.DoubleRow;
 import timerow.TimeRow;
 
+import java.io.IOException;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.SortedMap;
 
 public class CalcMain {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
 
+        DataLoader dataLoader = new DataLoader("/home/misha/IdeaProjects/Forecast/calculations/src/main/resources/AUDUSD240.csv");
+        SortedMap<LocalDateTime, Model> models =  dataLoader.getModelList();
+        DoubleRow dr = dataLoader.getFromDate(LocalDateTime.now().minusWeeks(3));
 
-        List<Double> params = List.of(0.1,0.2,-0.1,0.1,0.2,-0.1,0.1,0.2,-0.1,0.1,0.2,-0.1);
+        List<Double> coefs = new ArrayList<>();
+        List<Double> steps = new ArrayList<>();
 
-        Integer[] x = new Integer[1000];
-        Double[] y = new Double[1000];
-
-
-        for(int i = 0 ; i <x.length; i++){
-            x[i] = i;
+        int order = 100;
+        for(int i = 0; i < order; i++){
+            coefs.add(1./ order);
+            steps.add(100.);
         }
 
+        SinFunction sinFunction = new SinFunction(300,coefs);
 
-        var rnd = new Random();
-        for (int i = 0; i < params.size(); i++){
-            y[i] = rnd.nextDouble() * 10;
-        }
-
-        for (int i = params.size(); i < y.length; i++){
-            y[i] = 0.;
-        }
-
-//        LineFunctionNoise lineFunctionNoise = new LineFunctionNoise(5, 34, 12);
-        TimeRow<Integer, Double> tmpRow = new DoubleRow(x, y);
-        MovingAverageFunction movingAverageFunction = new MovingAverageFunctionNoise(tmpRow, params, 30);
-
-        TimeRow<Integer, Double> row = new DoubleRow(x, movingAverageFunction);
-
-        MovingAverageFunction movingAverageFunction1 = new MovingAverageFunction(tmpRow, List.of(0.2,0.2,-0.3,7.,0.2,-0.1,0.4,0.2,-0.1,0.1,0.2,-0.1));
-
-        ParamFuncOptimizer<Integer, Double> optimizer = new ParamFuncOptimizer<>(movingAverageFunction1, List.of(1.,1.,1.,1.,1.,1.,1.,1.,1.,1.,1.,1.,1.,1.,1.),0.000000001, row);
+        ParamFuncOptimizer<Integer, Double> optimizer = new ParamFuncOptimizer<>(sinFunction, steps,0.000005, dr);
         optimizer.optimize();
 
+        DoubleRow dr1 = new DoubleRow(dr.getXes().toArray(new Integer[0]), sinFunction);
 
+        DataWriter dw = new DataWriter( dr, dr1,"/home/misha/IdeaProjects/Forecast/calculations/src/main/resources/AUDUSD240.json");
+        dw.write();
 
         System.out.println("end");
     }

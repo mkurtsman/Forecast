@@ -66,8 +66,8 @@ public class DataLoader {
             DataLoader dataLoader = new DataLoader("/home/misha/IdeaProjects/Forecast/calculations/src/main/resources/AUDUSD240.csv");
             SortedMap<LocalDateTime, Model> models =  dataLoader.getModelList();
             DoubleRow dr = dataLoader.getFromDate(LocalDateTime.now().minusYears(1));
-            DataWriter dw = new DataWriter( dr,"/home/misha/IdeaProjects/Forecast/calculations/src/main/resources/AUDUSD240.json");
-            dw.write();
+//            DataWriter dw = new DataWriter( dr,"/home/misha/IdeaProjects/Forecast/calculations/src/main/resources/AUDUSD240.json");
+//            dw.write();
         } catch (IOException e) {
             e.printStackTrace();
         }

@@ -16,13 +16,15 @@ import java.util.stream.IntStream;
 
 public class DataWriter {
     private DoubleRow data;
+    private DoubleRow data1;
     private String filePath;
 
     DecimalFormat df = new DecimalFormat("0.#####");
 
 
-    public DataWriter(DoubleRow data, String filePath){
+    public DataWriter(DoubleRow data, DoubleRow data1, String filePath){
         this.data = data;
+        this.data1 = data1;
         this.filePath = filePath;
     }
 
@@ -44,16 +46,19 @@ public class DataWriter {
         s.setName("init data");
         s.setType(GraphType.line);
         s.setPoints(data.getPoints());
-
         config.setSeriesList(new Series[]{s});
+
+        Series s1 = new Series();
+        s1.setColor(new int[]{0, 0,255});
+        s1.setName("approximation");
+        s1.setType(GraphType.line);
+        s1.setPoints(data1.getPoints());
+
+        config.setSeriesList(new Series[]{s, s1});
 
         FileWriter writer = new FileWriter(filePath);
         new Gson().toJson(config, writer);
         writer.close();
-
-
-
-
 
     }
 
