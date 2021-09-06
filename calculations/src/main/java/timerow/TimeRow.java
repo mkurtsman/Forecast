@@ -13,6 +13,10 @@ TimeRow<X, Y extends Number> {
     protected TimeRow(){
     }
 
+    protected TimeRow(SortedMap<X, Y> points ){
+        this.points.putAll(points);
+    }
+
     public TimeRow(X[] xes, Y[] ys){
         for(int i = 0; i< xes.length; i++){
             points.put(xes[i], ys[i]);
@@ -27,6 +31,7 @@ TimeRow<X, Y extends Number> {
 
     public TimeRow(X[] xes, Y[] ys, ParametricFunction<X, Y> function){
         for(int i = 0; i< xes.length; i++){
+
             if(i < ys.length){
                 points.put(xes[i], ys[i]);
             } else {

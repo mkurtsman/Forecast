@@ -2,6 +2,9 @@ package timerow;
 
 import functions.ParametricFunction;
 
+import java.util.List;
+import java.util.SortedMap;
+
 public class DoubleRow extends TimeRow<Integer, Double> {
 
     public DoubleRow() {
@@ -40,4 +43,17 @@ public class DoubleRow extends TimeRow<Integer, Double> {
     public DoubleRow copy() {
         return (DoubleRow) super.copy();
     }
+
+    public Double[][] getPoints(){
+        Double[][] ret = new Double[points.size()][2];
+        List<Integer> xes = getXes();
+        List<Double> yes = getYes();
+
+        for(int i = 0; i < points.size(); i++){
+            ret[i][0] = Double.valueOf(xes.get(i));
+            ret[i][1] = yes.get(i);
+        }
+        return ret;
+    }
+
 }
