@@ -5,7 +5,7 @@ import optimizer.ParamFuncOptimizer;
 import timerow.DoubleRow;
 import java.util.List;
 
-public class Calculator<X, Y extends Number>{
+public class Calculator{
 
     private final DoubleRow timeRow;
 
@@ -18,7 +18,7 @@ public class Calculator<X, Y extends Number>{
         LineFunction function = new LineFunction(0.5, 0.5);
         List<Double> steps = List.of(5.0, 5.0);
         Double eps = 0.000001;
-        ParamFuncOptimizer<X,Y> optimizer = new ParamFuncOptimizer(function, steps, eps, timeRow);
+        ParamFuncOptimizer optimizer = new ParamFuncOptimizer(function, steps, eps, timeRow);
         optimizer.optimize();
 
         DoubleRow lineOpimizedRow = timeRow.copy();
@@ -32,10 +32,10 @@ public class Calculator<X, Y extends Number>{
         Double devider = cyclic.maxAbs();
         DoubleRow normalizedCyclic = (DoubleRow) cyclic.devide(devider);
 
-        ParamFuncOptimizer<X,Y> optimizer = new ParamFuncOptimizer(function, steps, eps, timeRow);
+        ParamFuncOptimizer cyclicOptimizer = new ParamFuncOptimizer(function, steps, eps, timeRow);
 
-        cyclic.apply();
-        cyclic.mutiply(devider);
+//        cyclic.apply();
+//        cyclic.mutiply(devider);
 
         // 3. remove MA
 

@@ -5,9 +5,7 @@ import data.write.DataConfig;
 import data.write.GraphType;
 import data.write.Series;
 import timerow.DoubleRow;
-import timerow.TimeRow;
 
-import javax.sound.sampled.Line;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.text.DecimalFormat;

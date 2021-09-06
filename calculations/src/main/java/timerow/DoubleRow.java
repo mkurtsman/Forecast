@@ -2,46 +2,43 @@ package timerow;
 
 import functions.ParametricFunction;
 
-import java.util.List;
-import java.util.SortedMap;
+import java.util.*;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
-public class DoubleRow extends TimeRow<Integer, Double> {
+public class DoubleRow {
+
+    private List<Double> points = new ArrayList<>();
 
     public DoubleRow() {
     }
 
-    public DoubleRow(Integer[] integers, Double[] doubles) {
-        super(integers, doubles);
+
+    public DoubleRow(List<Double> points){
+        this.points.addAll(points);
     }
 
-    public DoubleRow(Integer[] integers, ParametricFunction<Integer, Double> function) {
-        super(integers, function);
+    public DoubleRow(int size, ParametricFunction function){
+        for(int i = 0; i< size; i++){
+            points.add(function.apply(i));
+        }
     }
 
-    @Override
-    public Double minSquare(ParametricFunction<Integer, Double> function) {
-        double sum = this.points.entrySet().stream().mapToDouble(p -> Math.pow(p.getValue() - function.apply(p.getKey()),2)).sum();
+    public DoubleRow(int size, Double[] ys, ParametricFunction function){
+        for(int i = 0; i< size; i++){
+
+            if(i < ys.length){
+                points.add(ys[i]);
+            } else {
+                points.add(function.apply(i));
+            }
+        }
+    }
+
+    public Double minSquare(ParametricFunction function) {
+        double sum = IntStream.range(0, points.size()).mapToDouble(i -> Math.pow(points.get(i) - function.apply(i),2)).sum();
         return Math.sqrt(sum/points.size());
-    }
-
-    @Override
-    protected Double add(Double v1, Double v2) {
-        return v1 + v2;
-    }
-
-    @Override
-    protected Double subtract(Double v1, Double v2) {
-        return v1 - v2;
-    }
-
-    @Override
-    protected TimeRow<Integer, Double> newEmpty() {
-        return new DoubleRow();
-    }
-
-    @Override
-    public DoubleRow copy() {
-        return (DoubleRow) super.copy();
     }
 
     public Double[][] getPoints(){
@@ -54,6 +51,67 @@ public class DoubleRow extends TimeRow<Integer, Double> {
             ret[i][1] = yes.get(i);
         }
         return ret;
+    }
+
+    public void set(Integer x, Double sum) {
+        this.points.set(x, sum);
+    }
+
+    public Double get(Integer x){
+        return points.get(x);
+    }
+
+    public List<Integer> getXes(){
+        return IntStream.range(0, points.size()).boxed().toList();
+    }
+
+    public Integer size() {
+        return  points.size();
+    }
+
+        public List<Double> getYes(){
+        return new ArrayList<>(points);
+    }
+
+
+    public DoubleRow add(DoubleRow added){
+        DoubleRow newRow = new DoubleRow();
+        IntStream.range(0, points.size()).forEach(x -> newRow.points.add(this.points.get(x) + added.points.get(x)));
+        return newRow;
+    }
+
+    public DoubleRow subtract(DoubleRow substracted){
+        DoubleRow newRow = new DoubleRow();
+        IntStream.range(0, points.size()).forEach(x -> newRow.points.add(this.points.get(x) - substracted.points.get(x)));
+        return newRow;
+    }
+
+    public DoubleRow mutiply(Double multiplyer){
+        DoubleRow newRow = new DoubleRow();
+        IntStream.range(0, points.size()).forEach(x -> newRow.points.add(this.points.get(x)* multiplyer));
+        return newRow;
+    }
+
+    public DoubleRow devide(Double devider){
+        DoubleRow newRow = new DoubleRow();
+        IntStream.range(0, points.size()).forEach(x -> newRow.points.add(this.points.get(x)/ devider));
+        return newRow;
+    }
+
+    public DoubleRow copy(){
+        DoubleRow newRow = new DoubleRow();
+        newRow.points.addAll(this.points);
+        return newRow;
+    }
+
+    public DoubleRow apply(ParametricFunction function){
+        DoubleRow newRow = new DoubleRow();
+        IntStream.range(0, points.size()).forEach(x -> newRow.points.add(function.apply(x)));
+        return newRow;
+    }
+
+    public Double maxAbs(){
+        return getYes().stream().mapToDouble(Number::doubleValue).map(Math::abs).max().orElse(0.0);
     }
 
 }

@@ -4,13 +4,11 @@ import data.read.Model;
 import functions.*;
 import optimizer.ParamFuncOptimizer;
 import timerow.DoubleRow;
-import timerow.TimeRow;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 import java.util.SortedMap;
 
 public class CalcMain {
@@ -31,10 +29,10 @@ public class CalcMain {
 
         SinFunction sinFunction = new SinFunction(300,coefs);
 
-        ParamFuncOptimizer<Integer, Double> optimizer = new ParamFuncOptimizer<>(sinFunction, steps,0.000005, dr);
+        ParamFuncOptimizer optimizer = new ParamFuncOptimizer(sinFunction, steps,0.000005, dr);
         optimizer.optimize();
 
-        DoubleRow dr1 = new DoubleRow(dr.getXes().toArray(new Integer[0]), sinFunction);
+        DoubleRow dr1 = new DoubleRow(dr.size(), sinFunction);
 
         DataWriter dw = new DataWriter( dr, dr1,"/home/misha/IdeaProjects/Forecast/calculations/src/main/resources/AUDUSD240.json");
         dw.write();

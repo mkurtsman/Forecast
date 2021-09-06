@@ -1,25 +1,19 @@
 package functions;
 
-import timerow.TimeRow;
+import timerow.DoubleRow;
 
 import java.util.List;
-import java.util.TreeMap;
-import java.util.stream.IntStream;
 
-import static java.lang.Math.PI;
-import static java.lang.Math.sin;
-
-public class MovingAverageFunction extends ParametricFunction<Integer, Double>{
+public class MovingAverageFunction extends ParametricFunction{
 
 
-    private final TimeRow<Integer, Double> timeRow;
-    private final TimeRow<Integer, Double> values;
+    private final DoubleRow timeRow;
+    private final DoubleRow values;
 
-    public MovingAverageFunction(TimeRow<Integer, Double> timeRow, List<Double> params){
+    public MovingAverageFunction(DoubleRow timeRow, List<Double> params){
         this.params.addAll(params);
         this.timeRow = timeRow;
         values = timeRow.copy();
-
         update(params);
 
     }

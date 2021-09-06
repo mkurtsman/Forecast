@@ -5,7 +5,7 @@ import java.util.stream.IntStream;
 
 import static java.lang.Math.*;
 
-public class SinFunction extends ParametricFunction<Integer, Double>{
+public class SinFunction extends ParametricFunction{
 
     private final int count;
 

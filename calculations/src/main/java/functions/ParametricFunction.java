@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
 
-public abstract class ParametricFunction<T, R> implements Function<T, R> {
+public abstract class ParametricFunction implements Function<Integer, Double> {
 
     protected List<Double> params = new ArrayList<>();
 

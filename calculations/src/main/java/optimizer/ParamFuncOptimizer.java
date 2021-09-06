@@ -1,22 +1,22 @@
 package optimizer;
 
 import functions.ParametricFunction;
-import timerow.TimeRow;
+import timerow.DoubleRow;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import static java.lang.Math.abs;
 
-public class ParamFuncOptimizer<X, Y extends Number> {
-    private ParametricFunction<X, Y> function;
+public class ParamFuncOptimizer {
+    private ParametricFunction function;
     private List<Double> initSteps;
 
-    private TimeRow<X, Y> timeRow;
+    private DoubleRow timeRow;
 
     private Double eps;
 
-    public ParamFuncOptimizer(ParametricFunction<X, Y> function, List<Double> initSteps, Double eps, TimeRow<X, Y> timeRow) {
+    public ParamFuncOptimizer(ParametricFunction function, List<Double> initSteps, Double eps, DoubleRow timeRow) {
         this.function = function;
         this.initSteps = new ArrayList<>(initSteps);
         this.timeRow = timeRow;
@@ -38,7 +38,7 @@ public class ParamFuncOptimizer<X, Y extends Number> {
         System.out.println(function.paramsString());
     }
 
-    private void optimizeByParam(int i, ParametricFunction<X, Y> function, int req) {
+    private void optimizeByParam(int i, ParametricFunction function, int req) {
         if(req > 100){
             return;
         }

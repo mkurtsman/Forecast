@@ -1,6 +1,6 @@
 package functions;
 
-public class LineFunction extends ParametricFunction<Integer, Double> {
+public class LineFunction extends ParametricFunction {
 
     public LineFunction(double a, double b){
         params.add(a);

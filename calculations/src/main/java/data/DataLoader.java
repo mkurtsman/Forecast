@@ -13,6 +13,8 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 public class DataLoader {
 
@@ -58,7 +60,8 @@ public class DataLoader {
             i++;
         }
 
-        return new DoubleRow(iList.toArray(new Integer[]{}), dList.toArray(new Double[]{}));
+
+        return new DoubleRow(models.keySet().stream().map(k -> models.get(k).getClose()).collect(Collectors.<Double>toList()));
     }
 
     public static void main(String[] args) {
