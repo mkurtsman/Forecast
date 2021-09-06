@@ -4,6 +4,7 @@ import functions.ParametricFunction;
 
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.DoubleStream;
 
 abstract public class
 TimeRow<X, Y extends Number> {
@@ -69,6 +70,18 @@ TimeRow<X, Y extends Number> {
         return newRow;
     }
 
+    public TimeRow<X, Y> mutiply(Double multiplyer){
+        TimeRow<X, Y> newRow = newEmpty();
+        points.forEach((x, y) -> newRow.points.put(x, (Y) Double.valueOf(points.get(x).doubleValue() * multiplyer)));
+        return newRow;
+    }
+
+    public TimeRow<X, Y> devide(Double devider){
+        TimeRow<X, Y> newRow = newEmpty();
+        points.forEach((x, y) -> newRow.points.put(x, (Y) Double.valueOf(points.get(x).doubleValue() / devider)));
+        return newRow;
+    }
+
     public TimeRow<X, Y> copy(){
         TimeRow<X, Y> newRow = newEmpty();
         newRow.points.putAll(this.points);
@@ -82,6 +95,10 @@ TimeRow<X, Y extends Number> {
         }
     }
 
+    public Double maxAbs(){
+       return getYes().stream().mapToDouble(Number::doubleValue).map(Math::abs).max().orElse(0.0);
+    }
+
     abstract public Double minSquare(ParametricFunction<X, Y> function);
 
     abstract protected Y add(Y v1, Y v2);
@@ -89,6 +106,7 @@ TimeRow<X, Y extends Number> {
     abstract protected Y subtract(Y v1, Y v2);
 
     abstract protected TimeRow<X, Y> newEmpty();
+
 
 
 }

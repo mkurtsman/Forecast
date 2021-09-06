@@ -1,12 +1,8 @@
 package calculator;
 
 import functions.LineFunction;
-import functions.ParametricFunction;
 import optimizer.ParamFuncOptimizer;
 import timerow.DoubleRow;
-import timerow.TimeRow;
-
-import java.util.ArrayList;
 import java.util.List;
 
 public class Calculator<X, Y extends Number>{
@@ -32,6 +28,24 @@ public class Calculator<X, Y extends Number>{
         cyclic.subtract(lineOpimizedRow);
 
        // 2. remove cyclic
+
+        Double devider = cyclic.maxAbs();
+        DoubleRow normalizedCyclic = (DoubleRow) cyclic.devide(devider);
+
+        ParamFuncOptimizer<X,Y> optimizer = new ParamFuncOptimizer(function, steps, eps, timeRow);
+
+        cyclic.apply();
+        cyclic.mutiply(devider);
+
+        // 3. remove MA
+
+        // 4. calc noise
+
+        // 5. extrapolate
+
+        // 6. add cyclic
+        // 7. add trend
+
 
 
     }
