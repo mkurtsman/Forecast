@@ -23,7 +23,7 @@ public class ParamFuncOptimizer<X, Y extends Number> {
         this.eps = eps;
     }
 
-    public ParametricFunction<X, Y> optimize() {
+    public void optimize() {
         Double error = timeRow.minSquare(function);
         Double prewError = Double.MAX_VALUE;
         int cnt = 0;
@@ -36,7 +36,6 @@ public class ParamFuncOptimizer<X, Y extends Number> {
             System.out.println("Itteration count: " + cnt++ + " error " + error +" "+function.paramsString());
         }
         System.out.println(function.paramsString());
-        return function;
     }
 
     private void optimizeByParam(int i, ParametricFunction<X, Y> function, int req) {

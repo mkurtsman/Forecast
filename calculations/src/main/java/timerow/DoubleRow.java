@@ -35,4 +35,9 @@ public class DoubleRow extends TimeRow<Integer, Double> {
     protected TimeRow<Integer, Double> newEmpty() {
         return new DoubleRow();
     }
+
+    @Override
+    public DoubleRow copy() {
+        return (DoubleRow) super.copy();
+    }
 }

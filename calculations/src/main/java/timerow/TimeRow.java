@@ -27,7 +27,6 @@ TimeRow<X, Y extends Number> {
 
     public TimeRow(X[] xes, Y[] ys, ParametricFunction<X, Y> function){
         for(int i = 0; i< xes.length; i++){
-
             if(i < ys.length){
                 points.put(xes[i], ys[i]);
             } else {
@@ -71,6 +70,12 @@ TimeRow<X, Y extends Number> {
         return newRow;
     }
 
+    public void apply(ParametricFunction<X, Y> function){
+        List<X> xes = getXes();
+        for(int i = 0; i< xes.size(); i++){
+            set(xes.get(i), function.apply(xes.get(i)));
+        }
+    }
 
     abstract public Double minSquare(ParametricFunction<X, Y> function);
 
