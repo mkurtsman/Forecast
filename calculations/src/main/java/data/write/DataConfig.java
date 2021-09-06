@@ -1,6 +1,9 @@
 package data.write;
 
+import com.google.gson.annotations.JsonAdapter;
 import com.google.gson.annotations.SerializedName;
+
+import java.util.List;
 
 public class DataConfig {
     @SerializedName("lx")
@@ -30,7 +33,7 @@ public class DataConfig {
         return seriesList;
     }
 
-    public void setSeriesList(Series[] seriesList) {
-        this.seriesList = seriesList;
+    public void setSeriesList(List<Series> seriesList){
+        this.seriesList = seriesList.toArray(Series[]::new);
     }
 }

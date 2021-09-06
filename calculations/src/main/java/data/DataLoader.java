@@ -45,36 +45,10 @@ public class DataLoader {
         return data;
     }
 
-    public DoubleRow getFromDate(LocalDateTime from) throws IOException {
+    public DoubleRow get(LocalDateTime from, LocalDateTime to) throws IOException {
 
-        SortedMap<LocalDateTime, Model> models = getModelList().tailMap(from);
-
-        List<Integer> iList = new LinkedList<>();
-        List<Double> dList = new LinkedList<>();
-
-        int i = 0;
-        var it = models.entrySet().iterator();
-        while (it.hasNext()){
-            iList.add(i);
-            dList.add(it.next().getValue().getClose());
-            i++;
-        }
-
-
-        return new DoubleRow(models.keySet().stream().map(k -> models.get(k).getClose()).collect(Collectors.<Double>toList()));
-    }
-
-    public static void main(String[] args) {
-        try {
-            DataLoader dataLoader = new DataLoader("/home/misha/IdeaProjects/Forecast/calculations/src/main/resources/AUDUSD240.csv");
-            SortedMap<LocalDateTime, Model> models =  dataLoader.getModelList();
-            DoubleRow dr = dataLoader.getFromDate(LocalDateTime.now().minusYears(1));
-//            DataWriter dw = new DataWriter( dr,"/home/misha/IdeaProjects/Forecast/calculations/src/main/resources/AUDUSD240.json");
-//            dw.write();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
+        SortedMap<LocalDateTime, Model> models = getModelList().subMap(from, to);
+        return new DoubleRow(models.entrySet().stream().map(e -> e.getValue().getClose()).collect(Collectors.<Double>toList()));
     }
 
 }

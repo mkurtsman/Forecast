@@ -59,10 +59,10 @@ public class Calculator{
         cyclic = timeRow.subtract(lineOptimizedRow);
         Double cyclicDivider = cyclic.maxAbs();
         DoubleRow normalizedCyclic = cyclic.divide(cyclicDivider);
-        int sinOrder = 10;
+        int sinOrder = 20;
         List<Double> sinParams = IntStream.range(0, sinOrder).mapToDouble(i -> ((double) i)/sinOrder).boxed().toList();
-        List<Double> sinSteps = IntStream.range(0, sinOrder).mapToDouble(i -> (1.0)).boxed().toList();
-        sinFunction = new SinFunction(normalizedCyclic.size()*2, sinParams);
+        List<Double> sinSteps = IntStream.range(0, sinOrder).mapToDouble(i -> (1.0/normalizedCyclic.size())).boxed().toList();
+        sinFunction = new SinFunction(normalizedCyclic.size(), sinParams);
         Double sinEps = 0.000001;
         ParamFuncOptimizer cyclicOptimizer = new ParamFuncOptimizer(sinFunction, sinSteps, sinEps, normalizedCyclic);
         cyclicOptimizer.optimize();
@@ -74,12 +74,12 @@ public class Calculator{
         maRow = normalizedCyclic.subtract(cyclicOptimizedRow);
         Double maDivider = maRow.maxAbs();
         DoubleRow normalizedMaRow = maRow.divide(maDivider);
-        int maOrder = 20;
+        int maOrder = 10;
         List<Double> maParams = IntStream.range(0, sinOrder).mapToDouble(i -> ((double) i)/maOrder).boxed().toList();
         List<Double> maSteps = IntStream.range(0, sinOrder).mapToDouble(i -> (1.0)).boxed().toList();
         movingAverageFunction = new MovingAverageFunction(normalizedMaRow, maParams);
 
-        Double maEps = 0.000001;
+        Double maEps = 0.0000001;
         ParamFuncOptimizer maOptimizer = new ParamFuncOptimizer(movingAverageFunction, maSteps, maEps, normalizedMaRow);
         maOptimizer.optimize();
         maOptimizedRow = normalizedMaRow.apply(movingAverageFunction);
@@ -90,10 +90,15 @@ public class Calculator{
         // 5. calc noise
         error = timeRow.subtract(resultRow).epsSquare();
 
-        lineOptimizedRowExtrapolated = lineOptimizedRow.extrapolate(extrapolationCount, lineFunction).tail(extrapolationCount);
-        cyclicOptimizedRowExtrapolated = cyclicOptimizedRow.extrapolate(extrapolationCount, sinFunction).tail(extrapolationCount);
-        maOptimizedRowExtrapolated = maOptimizedRow.extrapolate(extrapolationCount, movingAverageFunction).tail(extrapolationCount);
-        resultRowExtrapolated = lineOptimizedRowExtrapolated.add(cyclicOptimizedRowExtrapolated.add(maOptimizedRowExtrapolated.mutiply(maDivider).mutiply(cyclicDivider)));
+        lineOptimizedRowExtrapolated = lineOptimizedRow.extrapolate(extrapolationCount, lineFunction);
+
+
+        cyclicOptimizedRowExtrapolated = cyclicOptimizedRow.extrapolate(extrapolationCount, sinFunction);
+
+//        MovingAverageFunction f = new MovingAverageFunction(maOptimizedRow.extrapolateWithEmpty(extrapolationCount), movingAverageFunction.getParams());
+//        maOptimizedRowExtrapolated = maOptimizedRow.extrapolate(extrapolationCount, f);
+        resultRowExtrapolated = lineOptimizedRowExtrapolated.add(cyclicOptimizedRowExtrapolated/*.add(maOptimizedRowExtrapolated.mutiply(maDivider)*/.mutiply(cyclicDivider));
+
 
     }
 

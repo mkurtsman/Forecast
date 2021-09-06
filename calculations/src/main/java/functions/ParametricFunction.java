@@ -30,4 +30,8 @@ public abstract class ParametricFunction implements Function<Integer, Double> {
     }
 
     public abstract int from();
+
+    public List<Double> getParams() {
+        return params;
+    }
 }

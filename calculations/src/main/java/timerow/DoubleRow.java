@@ -127,18 +127,15 @@ public class DoubleRow {
         return getYes().stream().mapToDouble(Number::doubleValue).max().orElse(0.0);
     }
 
-    public DoubleRow extrapolate(int extrapolationCount, ParametricFunction lineFunction) {
+    public DoubleRow extrapolate(int extrapolationCount, ParametricFunction function) {
         DoubleRow newRow = copy();
-        IntStream.range(0, extrapolationCount).forEach(i -> newRow.points.add(lineFunction.apply(i+points.size())));
+        IntStream.range(0, extrapolationCount).forEach(i -> newRow.points.add(function.apply(i+points.size()+1)));
         return  newRow;
     }
 
-    public DoubleRow tail(int extrapolationCount) {
+    public DoubleRow extrapolateWithEmpty(int extrapolationCount) {
         DoubleRow newRow = copy();
-        newRow.points  = new ArrayList<>(extrapolationCount);
-        for(int i = 0; i < extrapolationCount ; i++){
-            newRow.points.add(points.get(points.size() - extrapolationCount + i));
-        }
-        return newRow;
+        IntStream.range(0, extrapolationCount).forEach(i -> newRow.points.add(0.0));
+        return  newRow;
     }
 }
