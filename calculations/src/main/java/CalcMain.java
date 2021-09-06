@@ -20,8 +20,8 @@ public class CalcMain {
 
         DataLoader dataLoader = new DataLoader("/home/misha/IdeaProjects/Forecast/calculations/src/main/resources/AUDUSD240.csv");
         LocalDateTime dt = LocalDateTime.of(2021, Month.SEPTEMBER, 3, 0, 0);
-        DoubleRow dr = dataLoader.get(dt.minusWeeks(12), dt);
-        DoubleRow dr1 = dataLoader.get(dt.minusWeeks(12), dt.minusWeeks(2));
+        DoubleRow dr = dataLoader.get(dt.minusWeeks(120), dt.minusWeeks(5));
+        DoubleRow dr1 = dataLoader.get(dt.minusWeeks(120), dt.minusWeeks(6));
         Calculator calculator = new Calculator(dr1, dr.size() - dr1.size());
         calculator.calculate();
 
