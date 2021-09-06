@@ -1,5 +1,6 @@
 package timerow;
 
+import functions.LineFunction;
 import functions.ParametricFunction;
 
 import java.util.*;
@@ -38,6 +39,11 @@ public class DoubleRow {
 
     public Double minSquare(ParametricFunction function) {
         double sum = IntStream.range(0, points.size()).mapToDouble(i -> Math.pow(points.get(i) - function.apply(i),2)).sum();
+        return Math.sqrt(sum/points.size());
+    }
+
+    public Double epsSquare() {
+        double sum = IntStream.range(0, points.size()).mapToDouble(i -> Math.pow(points.get(i),2)).sum();
         return Math.sqrt(sum/points.size());
     }
 
@@ -92,7 +98,7 @@ public class DoubleRow {
         return newRow;
     }
 
-    public DoubleRow devide(Double devider){
+    public DoubleRow divide(Double devider){
         DoubleRow newRow = new DoubleRow();
         IntStream.range(0, points.size()).forEach(x -> newRow.points.add(this.points.get(x)/ devider));
         return newRow;
@@ -113,5 +119,26 @@ public class DoubleRow {
     public Double maxAbs(){
         return getYes().stream().mapToDouble(Number::doubleValue).map(Math::abs).max().orElse(0.0);
     }
+    public Double min(){
+        return getYes().stream().mapToDouble(Number::doubleValue).min().orElse(0.0);
+    }
 
+    public Double max(){
+        return getYes().stream().mapToDouble(Number::doubleValue).max().orElse(0.0);
+    }
+
+    public DoubleRow extrapolate(int extrapolationCount, ParametricFunction lineFunction) {
+        DoubleRow newRow = copy();
+        IntStream.range(0, extrapolationCount).forEach(i -> newRow.points.add(lineFunction.apply(i+points.size())));
+        return  newRow;
+    }
+
+    public DoubleRow tail(int extrapolationCount) {
+        DoubleRow newRow = copy();
+        newRow.points  = new ArrayList<>(extrapolationCount);
+        for(int i = 0; i < extrapolationCount ; i++){
+            newRow.points.add(points.get(points.size() - extrapolationCount + i));
+        }
+        return newRow;
+    }
 }
