@@ -16,6 +16,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
+import static timerow.DoubleRowOperations.max;
+
 public class DataWriter {
     private DataConfig config = new DataConfig();
     private String filePath;
@@ -54,7 +56,7 @@ public class DataWriter {
         s.setType(type);
         series.add(s);
 
-        var m = row.max();
+        var m = max(row);
         maxY = maxY < m ? m : maxY;
         minY = minY > m ? m : minY;
     }

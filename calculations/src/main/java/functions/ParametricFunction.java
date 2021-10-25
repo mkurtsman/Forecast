@@ -6,7 +6,15 @@ import java.util.function.Function;
 
 public abstract class ParametricFunction implements Function<Integer, Double> {
 
-    protected List<Double> params = new ArrayList<>();
+    protected List<Double> params;
+
+    public ParametricFunction(){
+        this(new ArrayList<>());
+    }
+
+    public ParametricFunction(List<Double> params){
+        this.params = new ArrayList<>(params);
+    }
 
     public void setParam(Integer num, Double val){
         params.set(num, val);
@@ -33,5 +41,10 @@ public abstract class ParametricFunction implements Function<Integer, Double> {
 
     public List<Double> getParams() {
         return params;
+    }
+
+    @Override
+    public String toString() {
+        return paramsString();
     }
 }

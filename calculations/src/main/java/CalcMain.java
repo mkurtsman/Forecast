@@ -1,19 +1,12 @@
 import calculator.Calculator;
 import data.DataLoader;
 import data.DataWriter;
-import data.read.Model;
 import data.write.GraphType;
-import functions.*;
-import optimizer.ParamFuncOptimizer;
 import timerow.DoubleRow;
 
-import java.awt.*;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.Month;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.SortedMap;
 
 public class CalcMain {
     public static void main(String[] args) throws IOException {

@@ -37,16 +37,6 @@ public class DoubleRow {
         }
     }
 
-    public Double minSquare(ParametricFunction function) {
-        double sum = IntStream.range(0, points.size()).mapToDouble(i -> Math.pow(points.get(i) - function.apply(i),2)).sum();
-        return Math.sqrt(sum/points.size());
-    }
-
-    public Double epsSquare() {
-        double sum = IntStream.range(0, points.size()).mapToDouble(i -> Math.pow(points.get(i),2)).sum();
-        return Math.sqrt(sum/points.size());
-    }
-
     public Double[][] getPoints(){
         Double[][] ret = new Double[points.size()][2];
         List<Integer> xes = getXes();
@@ -79,63 +69,4 @@ public class DoubleRow {
         return new ArrayList<>(points);
     }
 
-
-    public DoubleRow add(DoubleRow added){
-        DoubleRow newRow = new DoubleRow();
-        IntStream.range(0, points.size()).forEach(x -> newRow.points.add(this.points.get(x) + added.points.get(x)));
-        return newRow;
-    }
-
-    public DoubleRow subtract(DoubleRow substracted){
-        DoubleRow newRow = new DoubleRow();
-        IntStream.range(0, points.size()).forEach(x -> newRow.points.add(this.points.get(x) - substracted.points.get(x)));
-        return newRow;
-    }
-
-    public DoubleRow mutiply(Double multiplyer){
-        DoubleRow newRow = new DoubleRow();
-        IntStream.range(0, points.size()).forEach(x -> newRow.points.add(this.points.get(x)* multiplyer));
-        return newRow;
-    }
-
-    public DoubleRow divide(Double devider){
-        DoubleRow newRow = new DoubleRow();
-        IntStream.range(0, points.size()).forEach(x -> newRow.points.add(this.points.get(x)/ devider));
-        return newRow;
-    }
-
-    public DoubleRow copy(){
-        DoubleRow newRow = new DoubleRow();
-        newRow.points.addAll(this.points);
-        return newRow;
-    }
-
-    public DoubleRow apply(ParametricFunction function){
-        DoubleRow newRow = new DoubleRow();
-        IntStream.range(0, points.size()).forEach(x -> newRow.points.add(function.apply(x)));
-        return newRow;
-    }
-
-    public Double maxAbs(){
-        return getYes().stream().mapToDouble(Number::doubleValue).map(Math::abs).max().orElse(0.0);
-    }
-    public Double min(){
-        return getYes().stream().mapToDouble(Number::doubleValue).min().orElse(0.0);
-    }
-
-    public Double max(){
-        return getYes().stream().mapToDouble(Number::doubleValue).max().orElse(0.0);
-    }
-
-    public DoubleRow extrapolate(int extrapolationCount, ParametricFunction function) {
-        DoubleRow newRow = copy();
-        IntStream.range(0, extrapolationCount).forEach(i -> newRow.points.add(function.apply(i+points.size()+1)));
-        return  newRow;
-    }
-
-    public DoubleRow extrapolateWithEmpty(int extrapolationCount) {
-        DoubleRow newRow = copy();
-        IntStream.range(0, extrapolationCount).forEach(i -> newRow.points.add(0.0));
-        return  newRow;
-    }
 }

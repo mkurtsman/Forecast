@@ -4,8 +4,9 @@ import timerow.DoubleRow;
 
 import java.util.List;
 
-public class MovingAverageFunction extends ParametricFunction{
+import static timerow.DoubleRowOperations.copy;
 
+public class MovingAverageFunction extends ParametricFunction{
 
     private final DoubleRow timeRow;
     private final DoubleRow values;
@@ -13,7 +14,7 @@ public class MovingAverageFunction extends ParametricFunction{
     public MovingAverageFunction(DoubleRow timeRow, List<Double> params){
         this.params.addAll(params);
         this.timeRow = timeRow;
-        values = timeRow.copy();
+        values = copy(timeRow);
         update(params);
 
     }
