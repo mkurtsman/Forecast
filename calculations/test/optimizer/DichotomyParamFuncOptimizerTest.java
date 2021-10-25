@@ -56,7 +56,7 @@ public class DichotomyParamFuncOptimizerTest {
         func.setParam(1, 3.0);
         func.setParam(2, 4.0);
 
-        var ranges = List.of(new Range(-10.0, 10.0), new Range(-10.0, 10.0), new Range(-100.0, 100.0));
+        var ranges = List.of(new Range(-2.0, 4.0), new Range(-1.0, 5.0), new Range(-34.0, 100.0));
         var paramEps = 0.05d;
         var eps = 0.00005d;
         var count = 1000;

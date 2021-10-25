@@ -3,17 +3,30 @@ package optimizer;
 import functions.ParametricFunction;
 import timerow.DoubleRow;
 
+import java.text.MessageFormat;
 import java.util.List;
 
 import static timerow.DoubleRowOperations.minSquare;
 
-public class StepFuncOptimizer extends AbstractOptimizer {
+public class StepFuncOptimizer implements AbstractOptimizer {
 
+    protected static MessageFormat mf = new MessageFormat("iterrations {0}, error {1}, func {2}");
     private List<Double> steps;
+    protected ParametricFunction function;
+    protected DoubleRow timeRow;
+    protected Double paramEps;
+    protected Double eps;
+    protected Integer maxCount;
+    protected Integer stepCount;
 
-    public StepFuncOptimizer(ParametricFunction function, List<Double> steps, Double dichotomyEps, Double eps, Integer maxCount, DoubleRow timeRow) {
-        super(function, dichotomyEps, eps, maxCount, timeRow);
+    public StepFuncOptimizer(ParametricFunction function, List<Double> steps, Double paramEps, Double eps, Integer maxCount, Integer stepCount, DoubleRow timeRow) {
         this.steps = steps;
+        this.function = function;
+        this.timeRow = timeRow;
+        this.paramEps = paramEps;
+        this.eps = eps;
+        this.maxCount = maxCount;
+        this.stepCount = stepCount;
     }
 
     @Override
@@ -22,7 +35,7 @@ public class StepFuncOptimizer extends AbstractOptimizer {
         var error = Double.MAX_VALUE;
         while (count < maxCount && error > eps) {
             for (int i = 0; i < function.getParamsCount(); i++) {
-                 optimizeByParam(i, function);
+                 optimizeByParam(i, function, 0);
             }
             error = minSquare(timeRow, function);
             count++;
@@ -30,8 +43,10 @@ public class StepFuncOptimizer extends AbstractOptimizer {
         }
     }
 
-    @Override
-    protected void optimizeByParam(int i, ParametricFunction function) {
+    private void optimizeByParam(int i, ParametricFunction function, int req) {
+        if(req > stepCount){
+            return;
+        }
 
         Double step = steps.get(i);
         Double param = function.getParam(i);
@@ -51,6 +66,11 @@ public class StepFuncOptimizer extends AbstractOptimizer {
             function.setParam(i, param - step);
         } else if (v2 > v && v > v1){
             function.setParam(i, param + step);
+        } else {
+
+            function.setParam(i, param);
+            steps.set(i, step / 2);
+            optimizeByParam(i, function, req +1);
         }
 
     }

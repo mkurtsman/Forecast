@@ -3,18 +3,29 @@ package optimizer;
 import functions.ParametricFunction;
 import timerow.DoubleRow;
 
+import java.text.MessageFormat;
 import java.util.List;
 
 import static timerow.DoubleRowOperations.minSquare;
 
 
-public class DichotomyParamFuncOptimizer extends AbstractOptimizer {
+public class DichotomyParamFuncOptimizer implements AbstractOptimizer {
 
     protected List<Range> ranges;
+    protected static MessageFormat mf = new MessageFormat("iterrations {0}, error {1}, func {2}");
+    protected ParametricFunction function;
+    protected DoubleRow timeRow;
+    protected Double paramEps;
+    protected Double eps;
+    protected Integer maxCount;
 
     public DichotomyParamFuncOptimizer(ParametricFunction function, List<Range> initRanges, Double paramEps, Double eps, Integer maxCount, DoubleRow timeRow) {
-        super(function, paramEps, eps, maxCount, timeRow);
         this.ranges = initRanges;
+        this.function = function;
+        this.timeRow = timeRow;
+        this.paramEps = paramEps;
+        this.eps = eps;
+        this.maxCount = maxCount;
     }
 
     public void optimize(){
@@ -32,8 +43,7 @@ public class DichotomyParamFuncOptimizer extends AbstractOptimizer {
         }
     }
 
-    @Override
-    protected void optimizeByParam(int i, ParametricFunction function) {
+    private void optimizeByParam(int i, ParametricFunction function) {
 
         Range range = ranges.get(i);
 
