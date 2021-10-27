@@ -37,14 +37,15 @@ public class SimpleParamFuncOptimizer implements AbstractOptimizer {
         var error = Double.MAX_VALUE;
         double COUNT = 100.0;
 
-        for(int k = 0; k < ranges.size(); k++){
+        for(int k = ranges.size() -1; k >=0; k--){
             var range = ranges.get(k);
             var r = range.getSize().divide(BigDecimal.valueOf(COUNT));
+            var rr = range.getFirst();
+
             BigDecimal min = BigDecimal.valueOf(Double.MAX_VALUE);
             BigDecimal point = range.getFirst();
-            var rr = range.getFirst();
-            for(int i = 0; i < 1000; i++){
-                rr = rr.add(r);
+
+            for(int i = 0; i < COUNT; i++){
                 function.setParam(k, rr);
                 var val = minSquare(timeRow, function);
                 System.out.println(val);
@@ -53,6 +54,7 @@ public class SimpleParamFuncOptimizer implements AbstractOptimizer {
                     min = val;
                     point = rr;
                 }
+                rr = rr.add(r);
             }
             function.setParam(k, point);
         }

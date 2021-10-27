@@ -14,6 +14,6 @@ public class DataRowFactory {
 
     public static DoubleRow getSQDoubleRow(ParametricFunction func){
 
-        return new DoubleRow(IntStream.range(0, 100).mapToObj(x -> func.apply(x)).toList());
+        return new DoubleRow(IntStream.range(0, 1000).mapToObj(x -> func.apply(x)).toList());
     }
 }
