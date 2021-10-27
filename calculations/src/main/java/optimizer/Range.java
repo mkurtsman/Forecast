@@ -1,37 +1,39 @@
 package optimizer;
 
+import java.math.BigDecimal;
+
 import static java.lang.Math.abs;
 
 public class Range {
-    protected Double first;
-    protected Double second;
+    protected BigDecimal first;
+    protected BigDecimal second;
 
-    public Range(Double first, Double second) {
+    public Range(BigDecimal first, BigDecimal second) {
         this.first = first;
         this.second = second;
     }
 
-    public Double getFirst() {
+    public BigDecimal getFirst() {
         return first;
     }
 
-    public Double getSecond() {
+    public BigDecimal getSecond() {
         return second;
     }
 
-    public void setFirst(Double first) {
+    public void setFirst(BigDecimal first) {
         this.first = first;
     }
 
-    public void setSecond(Double second) {
+    public void setSecond(BigDecimal second) {
         this.second = second;
     }
 
-    public Double getCenter() {
-        return (second + first) / 2;
+    public BigDecimal getCenter() {
+        return (second.add(first)).divide(BigDecimal.valueOf(2.0)) ;
     }
 
-    public Double getSize() {
-        return abs(second - first);
+    public BigDecimal getSize() {
+        return second.subtract(first).abs();
     }
 }

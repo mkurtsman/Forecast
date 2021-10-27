@@ -1,5 +1,6 @@
 package functions;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.stream.IntStream;
 
@@ -9,14 +10,14 @@ public class SinFunction extends ParametricFunction{
 
     private final int count;
 
-    public SinFunction(int count, List<Double> params){
+    public SinFunction(int count, List<BigDecimal> params){
         this.count = count;
         this.params.addAll(params);
     }
     @Override
-    public Double apply(Integer x) {
+    public BigDecimal apply(Integer x) {
         double a = 2 * PI * x / count;
-        return IntStream.range(0,params.size()).mapToDouble(i -> params.get(i)*sin(a*(i+1))).sum();
+        return IntStream.range(0,params.size()).mapToObj(i -> params.get(i).multiply(BigDecimal.valueOf(sin(a*(i+1))))).reduce((aa, b) -> aa.add(b)).orElse(BigDecimal.ZERO);
     }
 
     @Override

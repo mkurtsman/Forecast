@@ -1,15 +1,17 @@
 package functions;
 
+import java.math.BigDecimal;
+
 public class LineFunction extends ParametricFunction {
 
-    public LineFunction(double a, double b){
+    public LineFunction(BigDecimal a, BigDecimal b){
         params.add(a);
         params.add(b);
     }
 
     @Override
-    public Double apply(Integer arg) {
-        return params.get(0) + params.get(1) * arg;
+    public BigDecimal apply(Integer arg) {
+        return params.get(0).add(params.get(1).multiply(BigDecimal.valueOf(arg)));
     }
 
     @Override

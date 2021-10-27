@@ -6,6 +6,7 @@ import timerow.DoubleRow;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDate;
@@ -48,7 +49,7 @@ public class DataLoader {
     public DoubleRow get(LocalDateTime from, LocalDateTime to) throws IOException {
 
         SortedMap<LocalDateTime, Model> models = getModelList().subMap(from, to);
-        return new DoubleRow(models.entrySet().stream().map(e -> e.getValue().getClose()).collect(Collectors.<Double>toList()));
+        return new DoubleRow(models.entrySet().stream().map(e -> BigDecimal.valueOf(e.getValue().getClose())).collect(Collectors.<BigDecimal>toList()));
     }
 
 }

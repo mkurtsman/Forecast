@@ -1,26 +1,27 @@
 package functions;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
 
-public abstract class ParametricFunction implements Function<Integer, Double> {
+public abstract class ParametricFunction implements Function<Integer, BigDecimal> {
 
-    protected List<Double> params;
+    protected List<BigDecimal> params;
 
     public ParametricFunction(){
         this(new ArrayList<>());
     }
 
-    public ParametricFunction(List<Double> params){
+    public ParametricFunction(List<BigDecimal> params){
         this.params = new ArrayList<>(params);
     }
 
-    public void setParam(Integer num, Double val){
+    public void setParam(Integer num, BigDecimal val){
         params.set(num, val);
     }
 
-    public Double getParam(Integer num){
+    public BigDecimal getParam(Integer num){
         return params.get(num);
     }
 
@@ -39,7 +40,7 @@ public abstract class ParametricFunction implements Function<Integer, Double> {
 
     public abstract int from();
 
-    public List<Double> getParams() {
+    public List<BigDecimal> getParams() {
         return params;
     }
 

@@ -2,13 +2,14 @@ package functions;
 
 import functions.ParametricFunction;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
 
 public class ParamFuncFactory {
 
-    public static ParametricFunction getSimpleSQFunction(List<Double> params){
+    public static ParametricFunction getSimpleSQFunction(List<BigDecimal> params){
 
         var func = new ParametricFunction(params) {
 
@@ -18,9 +19,12 @@ public class ParamFuncFactory {
             }
 
             @Override
-            public Double apply(Integer x) {
+            public BigDecimal apply(Integer x) {
                 var params = getParams();
-                return params.get(0) + (x * params.get(1)) + (x - params.get(2)) * (x - params.get(2));
+                var s1 = params.get(0);
+                var s2 = params.get(1).multiply(BigDecimal.valueOf(x).subtract(BigDecimal.valueOf(30.)));
+                var s3 = params.get(2).multiply(BigDecimal.valueOf(x).subtract(BigDecimal.valueOf(50.)).pow(2));
+                return s1.add(s2).add(s3);
             }
         };
 
@@ -32,7 +36,7 @@ public class ParamFuncFactory {
     }
 
 
-    public static ParametricFunction getSimpleSQFunctionOneParam(Double param){
+    public static ParametricFunction getSimpleSQFunctionOneParam(BigDecimal param){
 
         var func = new ParametricFunction(List.of(param)) {
 
@@ -42,9 +46,9 @@ public class ParamFuncFactory {
             }
 
             @Override
-            public Double apply(Integer x) {
+            public BigDecimal apply(Integer x) {
                 var params = getParams();
-                return (x - params.get(0)) * (x - params.get(0));
+                return BigDecimal.valueOf(x).subtract(params.get(0)).pow(2);
             }
         };
 

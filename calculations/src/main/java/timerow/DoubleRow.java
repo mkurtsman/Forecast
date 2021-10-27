@@ -3,6 +3,7 @@ package timerow;
 import functions.LineFunction;
 import functions.ParametricFunction;
 
+import java.math.BigDecimal;
 import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -10,13 +11,13 @@ import java.util.stream.IntStream;
 
 public class DoubleRow {
 
-    private List<Double> points = new ArrayList<>();
+    private List<BigDecimal> points = new ArrayList<>();
 
     public DoubleRow() {
     }
 
 
-    public DoubleRow(List<Double> points){
+    public DoubleRow(List<BigDecimal> points){
         this.points.addAll(points);
     }
 
@@ -26,7 +27,7 @@ public class DoubleRow {
         }
     }
 
-    public DoubleRow(int size, Double[] ys, ParametricFunction function){
+    public DoubleRow(int size, BigDecimal[] ys, ParametricFunction function){
         for(int i = 0; i< size; i++){
 
             if(i < ys.length){
@@ -37,23 +38,23 @@ public class DoubleRow {
         }
     }
 
-    public Double[][] getPoints(){
-        Double[][] ret = new Double[points.size()][2];
+    public BigDecimal[][] getPoints(){
+        BigDecimal[][] ret = new BigDecimal[points.size()][2];
         List<Integer> xes = getXes();
-        List<Double> yes = getYes();
+        List<BigDecimal> yes = getYes();
 
         for(int i = 0; i < points.size(); i++){
-            ret[i][0] = Double.valueOf(xes.get(i));
+            ret[i][0] = BigDecimal.valueOf(xes.get(i));
             ret[i][1] = yes.get(i);
         }
         return ret;
     }
 
-    public void set(Integer x, Double sum) {
+    public void set(Integer x, BigDecimal sum) {
         this.points.set(x, sum);
     }
 
-    public Double get(Integer x){
+    public BigDecimal get(Integer x){
         return points.get(x);
     }
 
@@ -65,7 +66,7 @@ public class DoubleRow {
         return  points.size();
     }
 
-        public List<Double> getYes(){
+        public List<BigDecimal> getYes(){
         return new ArrayList<>(points);
     }
 

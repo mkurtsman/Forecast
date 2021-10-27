@@ -2,6 +2,8 @@ package timerow;
 
 import functions.ParametricFunction;
 
+import java.math.BigDecimal;
+import java.math.MathContext;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
@@ -15,7 +17,7 @@ public class DoubleRowOperations {
             throw new RuntimeException("size of rows mismatch");
         }
 
-        List<Double> values = IntStream.range(0, source.size()).mapToDouble(x -> source.get(x) + added.get(x)).boxed().toList();
+        List<BigDecimal> values = IntStream.range(0, source.size()).mapToObj(x ->  source.get(x).add(added.get(x))).toList();
         return new DoubleRow(values);
     }
 
@@ -24,20 +26,20 @@ public class DoubleRowOperations {
             throw new RuntimeException("size of rows mismatch");
         }
 
-        List<Double> values = IntStream.range(0, source.size()).mapToDouble(x -> source.get(x) - substracted.get(x)).boxed().toList();
+        List<BigDecimal> values = IntStream.range(0, source.size()).mapToObj(x -> source.get(x).subtract(substracted.get(x))).toList();
         return new DoubleRow(values);
     }
 
-    public static  DoubleRow mutiply(DoubleRow source, Double multiplyer){
-        List<Double> values = IntStream.range(0, source.size()).mapToDouble(x -> source.get(x) * multiplyer).boxed().toList();
+    public static  DoubleRow mutiply(DoubleRow source, BigDecimal multiplyer){
+        List<BigDecimal> values = IntStream.range(0, source.size()).mapToObj(x -> source.get(x).multiply(multiplyer)).toList();
         return new DoubleRow(values);
     }
 
-    public static  DoubleRow divide(DoubleRow source, Double devider){
-        if(devider == 0.0){
+    public static  DoubleRow divide(DoubleRow source, BigDecimal devider){
+        if(devider.compareTo(BigDecimal.ZERO) == 0){
             throw new RuntimeException("invalid devider");
         }
-        List<Double> values = IntStream.range(0, source.size()).mapToDouble(x -> source.get(x) / devider).boxed().toList();
+        List<BigDecimal> values = IntStream.range(0, source.size()).mapToObj(x -> source.get(x).divide(devider)).toList();
         return new DoubleRow(values);
     }
 
@@ -46,7 +48,7 @@ public class DoubleRowOperations {
     }
 
     public static  DoubleRow apply(DoubleRow source, ParametricFunction function){
-        List<Double> values = IntStream.range(0, source.size()).mapToDouble(x -> function.apply(x)).boxed().toList();
+        List<BigDecimal> values = IntStream.range(0, source.size()).mapToObj(x -> function.apply(x)).toList();
         return new DoubleRow(values);
     }
 
@@ -61,19 +63,19 @@ public class DoubleRowOperations {
         return source.getYes().stream().mapToDouble(Number::doubleValue).max().orElse(0.0);
     }
 
-    public static  DoubleRow extrapolate(DoubleRow source, int extrapolationCount, Function<Integer, Double> function) {
-        List<Double> list = new ArrayList<>(source.getYes());
+    public static  DoubleRow extrapolate(DoubleRow source, int extrapolationCount, Function<Integer, BigDecimal> function) {
+        List<BigDecimal> list = new ArrayList<>(source.getYes());
         IntStream.range(0, extrapolationCount).forEach(i -> list.add(function.apply(i)));
         return  new DoubleRow(list);
     }
 
     public static  DoubleRow extrapolateWithEmpty(DoubleRow source, int extrapolationCount) {
-        return  extrapolate(source, extrapolationCount, (p) -> 0.0);
+        return  extrapolate(source, extrapolationCount, (p) -> BigDecimal.ZERO);
     }
 
-    public static Double minSquare(DoubleRow source, ParametricFunction function) {
-        double sum = IntStream.range(0, source.size()).mapToDouble(i -> Math.pow(source.get(i) - function.apply(i),2)).sum();
-        return Math.sqrt(sum/source.size());
+    public static BigDecimal minSquare(DoubleRow source, ParametricFunction function) {
+        BigDecimal sum = IntStream.range(0, source.size()).mapToObj(i -> source.get(i).subtract(function.apply(i)).pow(2)).reduce((a, b) -> a.add(b) ).orElse(BigDecimal.ZERO);
+        return sum.sqrt(MathContext.DECIMAL128).divide(BigDecimal.valueOf(source.size()), MathContext.DECIMAL128);
     }
 
 }

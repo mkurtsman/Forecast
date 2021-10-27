@@ -4,11 +4,10 @@ import data.DataRowFactory;
 import functions.ParamFuncFactory;
 import org.junit.jupiter.api.Test;
 
+import java.math.BigDecimal;
 import java.util.List;
 
-import static java.lang.Math.abs;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 
 public class DichotomyParamFuncOptimizerTest {
@@ -18,12 +17,12 @@ public class DichotomyParamFuncOptimizerTest {
      */
     @Test
     public void approximateValueParamTest(){
-        var func = ParamFuncFactory.getSimpleSQFunctionOneParam(20.0);
+        var func = ParamFuncFactory.getSimpleSQFunctionOneParam(BigDecimal.valueOf(20.0));
         var row = DataRowFactory.getSQDoubleRow(func);
         var initParams = List.copyOf(func.getParams());
 
-        var ranges = List.of(new Range(-100.0, +100.0));
-        var paramEps = 0.05d;
+        var ranges = List.of(new Range(BigDecimal.valueOf(-100.0),BigDecimal.valueOf(100.0)));
+        var paramEps = 0.005d;
         var eps = 0.00005d;
         var count = 100;
 
@@ -34,10 +33,10 @@ public class DichotomyParamFuncOptimizerTest {
 
     @Test
     public void approximateValueParamTest1(){
-        var func = ParamFuncFactory.getSimpleSQFunctionOneParam(20.0);
+        var func = ParamFuncFactory.getSimpleSQFunctionOneParam(BigDecimal.valueOf(20.0));
         var row = DataRowFactory.getSQDoubleRow(func);
 
-        var ranges = List.of(new Range(-10.0, +10.0));
+        var ranges = List.of(new Range(BigDecimal.valueOf(-10.0), BigDecimal.valueOf(10.0)));
         var paramEps = 0.05d;
         var eps = 0.00005d;
         var count = 100;
@@ -52,16 +51,16 @@ public class DichotomyParamFuncOptimizerTest {
         var func = ParamFuncFactory.getSimpleSQFunction(DataRowFactory.sqParams);
         var row =  DataRowFactory.getSQDoubleRow(func);
         var initParams = List.copyOf(func.getParams());
-        func.setParam(0, 2.0);
-        func.setParam(1, 3.0);
-        func.setParam(2, 4.0);
+        func.setParam(0, BigDecimal.valueOf(3.0));
+        func.setParam(1, BigDecimal.valueOf(4.0));
+        func.setParam(2, BigDecimal.valueOf(6.0));
 
-        var ranges = List.of(new Range(-2.0, 4.0), new Range(-1.0, 5.0), new Range(-34.0, 100.1));
-        var paramEps = 0.05d;
+        var ranges = List.of(new Range(BigDecimal.valueOf(-4.0), BigDecimal.valueOf(4.0)), new Range(BigDecimal.valueOf(-8.0), BigDecimal.valueOf(8.0)), new Range(BigDecimal.valueOf(-10.0), BigDecimal.valueOf(10.1)));
+        var paramEps = 0.005d;
         var eps = 0.00005d;
-        var count = 1000;
+        var count = 100;
 
-        DichotomyParamFuncOptimizer optimizer = new DichotomyParamFuncOptimizer(func, ranges, paramEps, eps, count, row);
+        AbstractOptimizer optimizer = new SimpleParamFuncOptimizer(func, ranges, paramEps, eps, count, row); // new DichotomyParamFuncOptimizer(func, ranges, paramEps, eps, count, row);
         optimizer.optimize();
 
         assertEquals(-9.9609375, func.getParam(0));

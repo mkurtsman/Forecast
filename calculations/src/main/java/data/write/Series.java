@@ -1,10 +1,12 @@
 package data.write;
 
+import java.math.BigDecimal;
+
 public class Series {
     private String name;
     private GraphType type;
     private int color[];
-    private Double[][] points;
+    private BigDecimal[][] points;
 
     public String getName() {
         return name;
@@ -30,11 +32,11 @@ public class Series {
         this.color = color;
     }
 
-    public Double[][] getPoints() {
+    public BigDecimal[][] getPoints() {
         return points;
     }
 
-    public void setPoints(Double[][] points) {
+    public void setPoints(BigDecimal[][] points) {
         this.points = points;
     }
 }

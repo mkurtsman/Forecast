@@ -3,14 +3,19 @@ package optimizer;
 import functions.ParametricFunction;
 import timerow.DoubleRow;
 
+import java.math.BigDecimal;
+import java.math.MathContext;
+import java.math.RoundingMode;
 import java.text.MessageFormat;
 import java.util.List;
 
+import static java.lang.Math.abs;
 import static timerow.DoubleRowOperations.minSquare;
 
 
 public class DichotomyParamFuncOptimizer implements AbstractOptimizer {
 
+    public static final BigDecimal DIVISOR_2 = BigDecimal.valueOf(2);
     protected List<Range> ranges;
     protected static MessageFormat mf = new MessageFormat("iterrations {0}, error {1}, func {2}");
     protected ParametricFunction function;
@@ -31,43 +36,44 @@ public class DichotomyParamFuncOptimizer implements AbstractOptimizer {
     public void optimize(){
         var count = 0;
         var error = Double.MAX_VALUE;
-        while (count < maxCount && error > eps) {
-            for (int i = 0; i < function.getParamsCount(); i++) {
-                while (ranges.get(i).getSize() > paramEps) {
-                    optimizeByParam(i, function);
-                }
+        while (error > eps) {
+            for (int i = function.getParamsCount() - 1; i >= 0; i--) {
+                optimizeByParam(i);
             }
-            error = minSquare(timeRow, function);
+            error = minSquare(timeRow, function).doubleValue();
             count++;
             System.out.println(mf.format(new Object[]{count, error, function}));
         }
     }
 
-    private void optimizeByParam(int i, ParametricFunction function) {
+    private void optimizeByParam(int i) {
 
         Range range = ranges.get(i);
+        var a = range.first;
+        var b = range.second;
+        var sigma = BigDecimal.valueOf(paramEps).divide(BigDecimal.valueOf(3), MathContext.DECIMAL128);
 
-        var center = range.getCenter();
+        while (b.subtract(a).abs().compareTo(BigDecimal.valueOf(paramEps)) > 0) {
+            var x1 = a.add(b).subtract(sigma).divide(DIVISOR_2);
+            var x2 = a.add(b).add(sigma).divide(DIVISOR_2);
 
-        function.setParam(i, range.getFirst());
-        Double v1 = minSquare(timeRow, function);
+            function.setParam(i, x1);
+            BigDecimal v1 = minSquare(timeRow, function);
 
-        function.setParam(i, range.getSecond());
-        Double v2 = minSquare(timeRow, function);
+            function.setParam(i, x2);
+            BigDecimal v2 = minSquare(timeRow, function);
 
-        System.out.println("(" + range.getFirst() + ";" + range.getSecond() + ")");
-        System.out.println("(" + v1 + ";" + v2);
+            if (v1.compareTo(v2) < 0) {
+                b = x2;
+            } else {
+                a = x1;
+            }
 
-        if (v1 > v2) {
-            range.setFirst(center);
-        } else {
-            range.setSecond(center);
+            System.out.println("minsq: " + v1  + ";" + v2 + ")");
         }
 
-        System.out.println("--(" + range.getFirst() + ";" + range.getSecond() + ")");
-
-        function.setParam(i, center);
-
+        function.setParam(i, a.add(b).divide(DIVISOR_2));
+        System.out.println("param" + i + "=" + function.getParam(i) + ")");
     }
 }
 
