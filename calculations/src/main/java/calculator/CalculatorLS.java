@@ -16,8 +16,9 @@ import java.util.List;
 import java.util.stream.IntStream;
 
 import static timerow.DoubleRowOperations.*;
+import static timerow.DoubleRowOperations.mutiply;
 
-public class Calculator{
+public class CalculatorLS {
 
     private static final Logger logger = LoggerFactory.getLogger(Calculator.class);
 
@@ -29,25 +30,20 @@ public class Calculator{
     private DoubleRow lineOptimizedRow;
     private DoubleRow cyclic;
     private DoubleRow cyclicOptimizedRow;
-    private DoubleRow maRow;
-    private DoubleRow maOptimizedRow;
 
     private DoubleRow lineOptimizedRowExtrapolated;
     private DoubleRow cyclicOptimizedRowExtrapolated;
-    private DoubleRow maOtimizedRowExtrapolated;
     private DoubleRow resultRowExtrapolated;
 
 
     private LineFunction lineFunction;
     private SinFunction sinFunction;
-    private MovingAverageFunction movingAverageFunction;
 
     private Double error;
     private Double lineError;
     private Double sinError;
-    private Double maError;
 
-    public Calculator(DoubleRow timeRow, int extrapolationCount) {
+    public CalculatorLS(DoubleRow timeRow, int extrapolationCount) {
         this.timeRow = timeRow;
         this.extrapolationCount = extrapolationCount;
     }
@@ -85,35 +81,15 @@ public class Calculator{
 
         sinError = minSquare(normalizedCyclic,cyclicOptimizedRow).multiply(cyclicDivider).doubleValue();
 
-        // 3. remove MA
-
-        maRow = subtract(normalizedCyclic, cyclicOptimizedRow);
-        BigDecimal maDivider = maxAbs(maRow);
-        DoubleRow normalizedMaRow = divide(maRow,maDivider);
-        int maOrder = 10;
-        List<BigDecimal> maParams = IntStream.range(0, maOrder).mapToObj(i -> BigDecimal.valueOf (i).divide(BigDecimal.valueOf(maOrder))).toList();
-        List<Range> maSteps = IntStream.range(0, maOrder).mapToObj(i -> Range.ofSizeOne()).toList();
-
-        movingAverageFunction = new MovingAverageFunction(normalizedMaRow, maParams);
-
-        Double maEps = 0.001;
-        AbstractOptimizer maOptimizer = new DichotomyParamFuncOptimizer(movingAverageFunction, maSteps, maEps, normalizedMaRow);
-        maOptimizer.optimize();
-        maOptimizedRow = apply(normalizedMaRow, movingAverageFunction);
-        maError = minSquare(maRow,maOptimizedRow).multiply(maDivider).multiply(cyclicDivider).doubleValue();
 
         // 4. add cyclic and trend
-        var cyclicAndMa = add(mutiply(maOptimizedRow,maDivider), cyclic);
-        resultRow = add(mutiply(cyclicAndMa,cyclicDivider), lineOptimizedRow);
+        resultRow = add(mutiply(cyclicOptimizedRow,cyclicDivider), lineOptimizedRow);
         // 5. calc noise
         error = minSquare(timeRow,resultRow).doubleValue();
 
         lineOptimizedRowExtrapolated = extrapolate(lineOptimizedRow, extrapolationCount, lineFunction);
         cyclicOptimizedRowExtrapolated = extrapolate(cyclicOptimizedRow, extrapolationCount, sinFunction);
-        maOtimizedRowExtrapolated = extrapolate(cyclicOptimizedRow, extrapolationCount, movingAverageFunction);
-
-        var cyclicAndMaExtrapolated = add(mutiply(maOtimizedRowExtrapolated,maDivider), cyclicOptimizedRowExtrapolated);
-        resultRowExtrapolated = add(mutiply(cyclicAndMaExtrapolated,cyclicDivider), lineOptimizedRowExtrapolated);
+        resultRowExtrapolated = add(mutiply(cyclicOptimizedRowExtrapolated,cyclicDivider), lineOptimizedRowExtrapolated);
     }
 
     public DoubleRow getResultRow() {
@@ -139,24 +115,12 @@ public class Calculator{
         return cyclicOptimizedRow;
     }
 
-    public DoubleRow getMaRow() {
-        return maRow;
-    }
-
-    public DoubleRow getMaOptimizedRow() {
-        return maOptimizedRow;
-    }
-
     public LineFunction getLineFunction() {
         return lineFunction;
     }
 
     public SinFunction getSinFunction() {
         return sinFunction;
-    }
-
-    public MovingAverageFunction getMovingAverageFunction() {
-        return movingAverageFunction;
     }
 
     public Double getLineError() {
@@ -167,20 +131,12 @@ public class Calculator{
         return sinError;
     }
 
-    public Double getMaError() {
-        return maError;
-    }
-
     public DoubleRow getLineOptimizedRowExtrapolated() {
         return lineOptimizedRowExtrapolated;
     }
 
     public DoubleRow getCyclicOptimizedRowExtrapolated() {
         return cyclicOptimizedRowExtrapolated;
-    }
-
-    public DoubleRow getMaOptimizedRowExtrapolated() {
-        return maOtimizedRowExtrapolated;
     }
 
     public DoubleRow getResultRowExtrapolated() {
