@@ -62,7 +62,7 @@ public class DoubleRow {
         return IntStream.range(0, points.size()).boxed().toList();
     }
 
-    public Integer size() {
+    public int size() {
         return  points.size();
     }
 

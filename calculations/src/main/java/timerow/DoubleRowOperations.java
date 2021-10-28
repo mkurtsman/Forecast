@@ -40,7 +40,7 @@ public class DoubleRowOperations {
         if(devider.compareTo(BigDecimal.ZERO) == 0){
             throw new RuntimeException("invalid devider");
         }
-        List<BigDecimal> values = IntStream.range(0, source.size()).mapToObj(x -> source.get(x).divide(devider)).toList();
+        List<BigDecimal> values = IntStream.range(0, source.size()).mapToObj(x -> source.get(x).divide(devider, MathContext.DECIMAL128)).toList();
         return new DoubleRow(values);
     }
 

@@ -57,7 +57,7 @@ public class Calculator{
         var minLine = min(timeRow);
         var maxLine = max(timeRow);
 
-        lineFunction = new LineFunction((maxLine.subtract(minLine)).divide(TWO) , (maxLine.subtract(minLine)).divide(BigDecimal.valueOf(timeRow.size()), MathContext.DECIMAL64) );
+        lineFunction = new LineFunction((maxLine.subtract(minLine)).divide(TWO) , (maxLine.subtract(minLine)).divide(BigDecimal.valueOf(timeRow.size()), MathContext.DECIMAL128) );
 
         List<Range> steps = List.of(Range.of(maxLine,minLine) , Range.of(maxLine,minLine));
         Double eps = 0.0001;
@@ -90,9 +90,9 @@ public class Calculator{
         maRow = subtract(normalizedCyclic, cyclicOptimizedRow);
         BigDecimal maDivider = maxAbs(maRow);
         DoubleRow normalizedMaRow = divide(maRow,maDivider);
-        int maOrder = 20;
+        int maOrder = 10;
         List<BigDecimal> maParams = IntStream.range(0, maOrder).mapToObj(i -> BigDecimal.valueOf (i).divide(BigDecimal.valueOf(maOrder))).toList();
-        List<Range> maSteps = IntStream.range(0, sinOrder).mapToObj(i -> Range.ofSizeOne()).toList();
+        List<Range> maSteps = IntStream.range(0, maOrder).mapToObj(i -> Range.ofSizeOne()).toList();
 
         movingAverageFunction = new MovingAverageFunction(normalizedMaRow, maParams);
 

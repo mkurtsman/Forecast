@@ -65,8 +65,8 @@ public class DichotomyParamFuncOptimizer implements AbstractOptimizer {
                 a = x1;
             }
 
-            logger.debug("param{} f(x1) = {} {} f(x2) = {} {}, ", i, v1, x1, v2, x2);
-            logger.debug("param{} a = {} b = {}, ", i, a, b);
+            logger.debug("param({}) f(x1) = {} x1 = {} f(x2) = {} x2={}, ", i, v1, x1, v2, x2);
+            logger.debug("param({}) a = {} b = {} ", i, a, b);
         }
 
         function.setParam(i, a.add(b).divide(TWO));
