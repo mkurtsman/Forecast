@@ -10,6 +10,7 @@ import timerow.DoubleRow;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.lang.reflect.Type;
+import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.util.LinkedList;
 import java.util.List;
@@ -57,8 +58,8 @@ public class DataWriter {
         series.add(s);
 
         var m = max(row);
-        maxY = maxY < m ? m : maxY;
-        minY = minY > m ? m : minY;
+        maxY = BigDecimal.valueOf(maxY).compareTo(m) < 0 ? m.doubleValue() : maxY;
+        minY = BigDecimal.valueOf(minY).compareTo(m) > 0 ? m.doubleValue() : minY;
     }
 
 }
