@@ -1,64 +1,57 @@
 package optimizer;
 
 import functions.ParametricFunction;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import timerow.DoubleRow;
 
 import java.math.BigDecimal;
-import java.math.MathContext;
 import java.text.MessageFormat;
-import java.util.ArrayList;
 import java.util.List;
 
 import static timerow.DoubleRowOperations.minSquare;
 
 
 public class SimpleParamFuncOptimizer implements AbstractOptimizer {
+    private static Logger logger = LoggerFactory.getLogger(SimpleParamFuncOptimizer.class);
 
-    public static final BigDecimal DIVISOR_2 = BigDecimal.valueOf(2);
     protected List<Range> ranges;
     protected static MessageFormat mf = new MessageFormat("iterrations {0}, error {1}, func {2}");
     protected ParametricFunction function;
     protected DoubleRow timeRow;
-    protected Double paramEps;
-    protected Double eps;
-    protected Integer maxCount;
+    protected BigDecimal maxCount;
 
-    public SimpleParamFuncOptimizer(ParametricFunction function, List<Range> initRanges, Double paramEps, Double eps, Integer maxCount, DoubleRow timeRow) {
+    public SimpleParamFuncOptimizer(ParametricFunction function, List<Range> initRanges, Integer maxCount, DoubleRow timeRow) {
         this.ranges = initRanges;
         this.function = function;
         this.timeRow = timeRow;
-        this.paramEps = paramEps;
-        this.eps = eps;
-        this.maxCount = maxCount;
+        this.maxCount = BigDecimal.valueOf(maxCount);
     }
 
     public void optimize(){
         var count = 0;
         var error = Double.MAX_VALUE;
-        double COUNT = 100.0;
 
-        for(int k = ranges.size() -1; k >=0; k--){
+        for(int k = 0; k < ranges.size(); k++){
             var range = ranges.get(k);
-            var r = range.getSize().divide(BigDecimal.valueOf(COUNT));
-            var rr = range.getFirst();
-
+            var step = range.getSize().divide(this.maxCount);
+            var valX = range.getFirst();
+            BigDecimal paramValue = range.getFirst();
             BigDecimal min = BigDecimal.valueOf(Double.MAX_VALUE);
-            BigDecimal point = range.getFirst();
-
-            for(int i = 0; i < COUNT; i++){
-                function.setParam(k, rr);
+            for(int i = 0; i <= this.maxCount.intValue(); i++){
+                function.setParam(k, valX);
                 var val = minSquare(timeRow, function);
-                System.out.println(val);
                 if(val.compareTo(min) < 0){
-                    System.out.println(val +" ---" +rr);
+                    logger.debug("iteration {}, arg {}, min {}", k,val,valX);
                     min = val;
-                    point = rr;
+                    paramValue = valX;
                 }
-                rr = rr.add(r);
+                valX = valX.add(step);
             }
-            function.setParam(k, point);
+            function.setParam(k, paramValue);
         }
-        function.getParams().forEach(System.out::println);
+
+        logger.info("params {}", function.toString());
 
     }
 

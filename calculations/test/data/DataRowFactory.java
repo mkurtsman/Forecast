@@ -13,7 +13,7 @@ public class DataRowFactory {
     public static List<BigDecimal> sqParams = List.of( 2.0, 4.0, 5.0).stream().map(BigDecimal::valueOf).toList();
 
     public static DoubleRow getSQDoubleRow(ParametricFunction func){
-
-        return new DoubleRow(IntStream.range(0, 1000).mapToObj(x -> func.apply(x)).toList());
+        return new DoubleRow(IntStream.range(0, 100).mapToObj(x -> func.apply(x)).toList());
     }
+
 }

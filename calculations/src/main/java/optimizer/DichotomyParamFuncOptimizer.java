@@ -1,19 +1,21 @@
 package optimizer;
 
 import functions.ParametricFunction;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import timerow.DoubleRow;
 
 import java.math.BigDecimal;
 import java.math.MathContext;
-import java.math.RoundingMode;
 import java.text.MessageFormat;
 import java.util.List;
 
-import static java.lang.Math.abs;
 import static timerow.DoubleRowOperations.minSquare;
 
 
 public class DichotomyParamFuncOptimizer implements AbstractOptimizer {
+
+    private static Logger logger = LoggerFactory.getLogger(DichotomyParamFuncOptimizer.class);
 
     public static final BigDecimal DIVISOR_2 = BigDecimal.valueOf(2);
     protected List<Range> ranges;
@@ -21,29 +23,22 @@ public class DichotomyParamFuncOptimizer implements AbstractOptimizer {
     protected ParametricFunction function;
     protected DoubleRow timeRow;
     protected Double paramEps;
-    protected Double eps;
-    protected Integer maxCount;
 
-    public DichotomyParamFuncOptimizer(ParametricFunction function, List<Range> initRanges, Double paramEps, Double eps, Integer maxCount, DoubleRow timeRow) {
+    public DichotomyParamFuncOptimizer(ParametricFunction function, List<Range> initRanges, Double paramEps, DoubleRow timeRow) {
         this.ranges = initRanges;
         this.function = function;
         this.timeRow = timeRow;
         this.paramEps = paramEps;
-        this.eps = eps;
-        this.maxCount = maxCount;
     }
 
-    public void optimize(){
-        var count = 0;
+    public void optimize() {
         var error = Double.MAX_VALUE;
-        while (error > eps) {
-            for (int i = function.getParamsCount() - 1; i >= 0; i--) {
-                optimizeByParam(i);
-            }
-            error = minSquare(timeRow, function).doubleValue();
-            count++;
-            System.out.println(mf.format(new Object[]{count, error, function}));
+        for (int i = 0; i < function.getParamsCount(); i++) {
+            optimizeByParam(i);
         }
+        error = minSquare(timeRow, function).doubleValue();
+        logger.info("params {} error {}", function.toString(), error);
+
     }
 
     private void optimizeByParam(int i) {
@@ -54,6 +49,7 @@ public class DichotomyParamFuncOptimizer implements AbstractOptimizer {
         var sigma = BigDecimal.valueOf(paramEps).divide(BigDecimal.valueOf(3), MathContext.DECIMAL128);
 
         while (b.subtract(a).abs().compareTo(BigDecimal.valueOf(paramEps)) > 0) {
+
             var x1 = a.add(b).subtract(sigma).divide(DIVISOR_2);
             var x2 = a.add(b).add(sigma).divide(DIVISOR_2);
 
@@ -69,11 +65,11 @@ public class DichotomyParamFuncOptimizer implements AbstractOptimizer {
                 a = x1;
             }
 
-            System.out.println("minsq: " + v1  + ";" + v2 + ")");
+            logger.debug("param{} f(x1) = {} {} f(x2) = {} {}, ", i, v1, x1, v2, x2);
+            logger.debug("param{} a = {} b = {}, ", i, a, b);
         }
 
         function.setParam(i, a.add(b).divide(DIVISOR_2));
-        System.out.println("param" + i + "=" + function.getParam(i) + ")");
     }
 }
 
