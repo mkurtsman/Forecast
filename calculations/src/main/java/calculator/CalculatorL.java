@@ -46,9 +46,9 @@ public class CalculatorL {
         var minLine = min(timeRow);
         var maxLine = max(timeRow);
 
-        lineFunction = new LineFunction((maxLine.subtract(minLine)).divide(TWO) , (maxLine.subtract(minLine)).divide(BigDecimal.valueOf(timeRow.size()), MathContext.DECIMAL128) );
+        lineFunction = new LineFunction((maxLine.add(minLine)).divide(TWO) , (maxLine.subtract(minLine)).divide(BigDecimal.valueOf(timeRow.size()), MathContext.DECIMAL128) );
 
-        List<Range> steps = List.of(Range.of(maxLine,minLine) , Range.of(maxLine,minLine));
+        List<Range> steps = List.of(Range.of(BigDecimal.valueOf(-100), BigDecimal.valueOf(+100)) , Range.of(BigDecimal.valueOf(-100), BigDecimal.valueOf(+100)));
         Double eps = 0.000001;
         AbstractOptimizer optimizer = new DichotomyParamFuncOptimizer(lineFunction, steps, eps, timeRow);
         optimizer.optimize();
