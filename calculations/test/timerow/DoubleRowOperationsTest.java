@@ -1,5 +1,6 @@
 package timerow;
 
+import data.DataRowFactory;
 import functions.ParamFuncFactory;
 import functions.ParametricFunction;
 import org.junit.jupiter.api.Test;
@@ -10,6 +11,7 @@ import java.util.List;
 import java.util.stream.IntStream;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static timerow.DoubleRowOperations.maxAbs;
 import static timerow.DoubleRowOperations.minSquare;
 
 class DoubleRowOperationsTest {
@@ -25,8 +27,6 @@ class DoubleRowOperationsTest {
         DoubleRow row = new DoubleRow(10, func);
 
         assertTrue(minSquare(row, func).compareTo(BigDecimal.valueOf(0.0001)) < 0);
-
-
     }
 
     @Test
@@ -44,7 +44,21 @@ class DoubleRowOperationsTest {
 
 
         assertTrue(minSquare(row, func).subtract(BigDecimal.valueOf(654.6597)).compareTo(BigDecimal.valueOf(0.0001)) < 0);
-
-
     }
+
+    @Test
+    public void maxAbsTest(DoubleRow source){
+        assertEquals( BigDecimal.valueOf(43.1), maxAbs(DataRowFactory.getDoubleRow()));
+    }
+
+    @Test
+    public void minTest(DoubleRow source){
+        assertEquals( BigDecimal.valueOf(43.1), maxAbs(DataRowFactory.getDoubleRow()));
+    }
+
+    @Test
+    public void maxTest(DoubleRow source){
+        assertEquals( BigDecimal.valueOf(1.4), maxAbs(DataRowFactory.getDoubleRow()));
+    }
+
 }

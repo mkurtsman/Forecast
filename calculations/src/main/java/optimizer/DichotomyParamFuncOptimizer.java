@@ -10,6 +10,7 @@ import java.math.MathContext;
 import java.text.MessageFormat;
 import java.util.List;
 
+import static timerow.DoubleRowOperations.TWO;
 import static timerow.DoubleRowOperations.minSquare;
 
 
@@ -17,7 +18,6 @@ public class DichotomyParamFuncOptimizer implements AbstractOptimizer {
 
     private static Logger logger = LoggerFactory.getLogger(DichotomyParamFuncOptimizer.class);
 
-    public static final BigDecimal DIVISOR_2 = BigDecimal.valueOf(2);
     protected List<Range> ranges;
     protected static MessageFormat mf = new MessageFormat("iterrations {0}, error {1}, func {2}");
     protected ParametricFunction function;
@@ -44,14 +44,14 @@ public class DichotomyParamFuncOptimizer implements AbstractOptimizer {
     private void optimizeByParam(int i) {
 
         Range range = ranges.get(i);
-        var a = range.first;
-        var b = range.second;
+        var a = range.getFirst();
+        var b = range.getSecond();
         var sigma = BigDecimal.valueOf(paramEps).divide(BigDecimal.valueOf(3), MathContext.DECIMAL128);
 
         while (b.subtract(a).abs().compareTo(BigDecimal.valueOf(paramEps)) > 0) {
 
-            var x1 = a.add(b).subtract(sigma).divide(DIVISOR_2);
-            var x2 = a.add(b).add(sigma).divide(DIVISOR_2);
+            var x1 = a.add(b).subtract(sigma).divide(TWO);
+            var x2 = a.add(b).add(sigma).divide(TWO);
 
             function.setParam(i, x1);
             BigDecimal v1 = minSquare(timeRow, function);
@@ -69,7 +69,7 @@ public class DichotomyParamFuncOptimizer implements AbstractOptimizer {
             logger.debug("param{} a = {} b = {}, ", i, a, b);
         }
 
-        function.setParam(i, a.add(b).divide(DIVISOR_2));
+        function.setParam(i, a.add(b).divide(TWO));
     }
 }
 

@@ -2,13 +2,15 @@ package optimizer;
 
 import java.math.BigDecimal;
 
-import static java.lang.Math.abs;
-
 public class Range {
-    protected BigDecimal first;
-    protected BigDecimal second;
+    private BigDecimal first;
+    private BigDecimal second;
 
-    public Range(BigDecimal first, BigDecimal second) {
+    public static Range of(BigDecimal first, BigDecimal second){
+        return new Range(first, second);
+    }
+
+    protected Range(BigDecimal first, BigDecimal second) {
         this.first = first;
         this.second = second;
     }

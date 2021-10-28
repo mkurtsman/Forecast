@@ -16,4 +16,8 @@ public class DataRowFactory {
         return new DoubleRow(IntStream.range(0, 100).mapToObj(x -> func.apply(x)).toList());
     }
 
+    public static DoubleRow getDoubleRow(){
+        List<BigDecimal> list = List.of(BigDecimal.valueOf(23.4), BigDecimal.valueOf(1.4), BigDecimal.valueOf(43.1));
+        return new DoubleRow(list);
+    }
 }

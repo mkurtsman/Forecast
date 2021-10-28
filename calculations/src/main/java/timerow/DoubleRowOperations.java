@@ -7,10 +7,11 @@ import java.math.MathContext;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
-import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 public class DoubleRowOperations {
+
+    public static final BigDecimal TWO = BigDecimal.valueOf(2.0);
 
     public static DoubleRow add(DoubleRow source, DoubleRow added){
         if(source.size() != added.size()){
@@ -52,15 +53,15 @@ public class DoubleRowOperations {
         return new DoubleRow(values);
     }
 
-    public static  Double maxAbs(DoubleRow source){
-        return source.getYes().stream().mapToDouble(Number::doubleValue).map(Math::abs).max().orElse(0.0);
+    public static  BigDecimal maxAbs(DoubleRow source){
+        return source.getYes().stream().map(BigDecimal::abs).max(BigDecimal::compareTo).orElse(BigDecimal.ZERO);
     }
-    public static  Double min(DoubleRow source){
-        return source.getYes().stream().mapToDouble(Number::doubleValue).min().orElse(0.0);
+    public static  BigDecimal min(DoubleRow source){
+        return source.getYes().stream().min(BigDecimal::compareTo).orElse(BigDecimal.ZERO);
     }
 
-    public static  Double max(DoubleRow source){
-        return source.getYes().stream().mapToDouble(Number::doubleValue).max().orElse(0.0);
+    public static  BigDecimal max(DoubleRow source){
+        return source.getYes().stream().max(BigDecimal::compareTo).orElse(BigDecimal.ZERO);
     }
 
     public static  DoubleRow extrapolate(DoubleRow source, int extrapolationCount, Function<Integer, BigDecimal> function) {
@@ -78,4 +79,11 @@ public class DoubleRowOperations {
         return sum.sqrt(MathContext.DECIMAL128).divide(BigDecimal.valueOf(source.size()), MathContext.DECIMAL128);
     }
 
+    public static BigDecimal minSquare(DoubleRow source, DoubleRow row) {
+        if(source.size() != row.size()){
+            throw new RuntimeException("different row size");
+        }
+        BigDecimal sum = IntStream.range(0, source.size()).mapToObj(i -> source.get(i).subtract(row.get(i)).pow(2)).reduce((a, b) -> a.add(b) ).orElse(BigDecimal.ZERO);
+        return sum.sqrt(MathContext.DECIMAL128).divide(BigDecimal.valueOf(source.size()), MathContext.DECIMAL128);
+    }
 }
