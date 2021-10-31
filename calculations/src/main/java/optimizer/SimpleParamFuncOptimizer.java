@@ -32,7 +32,7 @@ public class SimpleParamFuncOptimizer implements AbstractOptimizer {
         var count = 0;
         var error = Double.MAX_VALUE;
 
-        for(int k = 0; k < ranges.size(); k++){
+        for(int k = 0; k < function.getParamsCount(); k++){
             var range = ranges.get(k);
             var step = range.getSize().divide(this.maxCount);
             var valX = range.getFirst();

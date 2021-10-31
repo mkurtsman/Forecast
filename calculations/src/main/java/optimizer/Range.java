@@ -7,6 +7,10 @@ public class Range {
     private BigDecimal first;
     private BigDecimal second;
 
+    public static Range of(double first, double second){
+        return new Range(BigDecimal.valueOf(first), BigDecimal.valueOf(second));
+    }
+
     public static Range of(BigDecimal first, BigDecimal second){
         return new Range(first, second);
     }

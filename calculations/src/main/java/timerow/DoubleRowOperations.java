@@ -66,7 +66,7 @@ public class DoubleRowOperations {
 
     public static  DoubleRow extrapolate(DoubleRow source, int extrapolationCount, Function<Integer, BigDecimal> function) {
         List<BigDecimal> list = new ArrayList<>(source.getYes());
-        IntStream.range(0, extrapolationCount).forEach(i -> list.add(function.apply(i)));
+        IntStream.range(list.size(), list.size() + extrapolationCount).forEach(i -> list.add(function.apply(i)));
         return  new DoubleRow(list);
     }
 
