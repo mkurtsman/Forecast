@@ -53,6 +53,25 @@ public class DoubleRowOperations {
         return new DoubleRow(values);
     }
 
+    public static  DoubleRow ln(DoubleRow source){
+        List<BigDecimal> values = IntStream.range(0, source.size()).mapToObj(x -> BigDecimal.valueOf(Math.log(source.get(x).doubleValue()))).toList();
+        return new DoubleRow(values);
+    }
+
+    public static  DoubleRow diff(DoubleRow source){
+        List<BigDecimal> values = IntStream.range(1, source.size()).mapToObj(x -> source.get(x).subtract(source.get(x-1))).toList();
+        return new DoubleRow(values);
+    }
+
+    public static  DoubleRow exp(DoubleRow source){
+        List<BigDecimal> values = IntStream.range(0, source.size()).mapToObj(x -> {
+            var y = source.get(x);
+            var p = Math.exp(y.doubleValue());
+            return BigDecimal.valueOf(p);
+        }).toList();
+        return new DoubleRow(values);
+    }
+
     public static  BigDecimal maxAbs(DoubleRow source){
         return source.getYes().stream().map(BigDecimal::abs).max(BigDecimal::compareTo).orElse(BigDecimal.ZERO);
     }
@@ -86,4 +105,6 @@ public class DoubleRowOperations {
         BigDecimal sum = IntStream.range(0, source.size()).mapToObj(i -> source.get(i).subtract(row.get(i)).pow(2)).reduce((a, b) -> a.add(b) ).orElse(BigDecimal.ZERO);
         return sum.sqrt(MathContext.DECIMAL128).divide(BigDecimal.valueOf(source.size()), MathContext.DECIMAL128);
     }
+
+
 }

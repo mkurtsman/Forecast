@@ -27,6 +27,8 @@ public class CalculatorLS {
 
     private DoubleRow resultRow;
 
+    private DoubleRow ln;
+
     private DoubleRow lineOptimizedRow;
     private DoubleRow cyclic;
     private DoubleRow cyclicOptimizedRow;
@@ -49,6 +51,9 @@ public class CalculatorLS {
     }
 
     public void calculate(){
+
+        ln = ln(timeRow);
+
         // 1. remove trend
         var minLine = min(timeRow);
         var maxLine = max(timeRow);
@@ -141,5 +146,9 @@ public class CalculatorLS {
 
     public DoubleRow getResultRowExtrapolated() {
         return resultRowExtrapolated;
+    }
+
+    public DoubleRow getLn() {
+        return ln;
     }
 }

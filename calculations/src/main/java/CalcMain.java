@@ -1,6 +1,7 @@
 import calculator.Calculator;
 import calculator.CalculatorL;
 import calculator.CalculatorLS;
+import calculator.LnCalculator;
 import data.DataLoader;
 import data.DataWriter;
 import data.write.GraphType;
@@ -19,18 +20,24 @@ public class CalcMain {
         DataLoader dataLoader = new DataLoader(path + "/AUDUSD240.csv") ;
         LocalDateTime dt = LocalDateTime.now();
         int week = 0;
-        DoubleRow dr = dataLoader.get(dt.minusMonths(2), dt);
-        DoubleRow dr1 = dataLoader.get(dt.minusMonths(2), dt.minusWeeks(1));
-        CalculatorL calculator = new CalculatorL(dr1, dr.size() - dr1.size());
+        DoubleRow dr = dataLoader.get(dt.minusWeeks(8), dt);
+        DoubleRow dr1 = dataLoader.get(dt.minusWeeks(8), dt.minusWeeks(1));
+        LnCalculator calculator = new LnCalculator(dr1, dr.size() - dr1.size());
         calculator.calculate();
 
         DataWriter dw = new DataWriter( path + "/AUDUSD240.json");
-//        dw.addSeries(dr, new int[]{155, 155,23}, "init", GraphType.line);
+        dw.addSeries(dr, new int[]{155, 155,23}, "init", GraphType.line);
 //        dw.addSeries(dr1, new int[]{255, 0,0}, "init", GraphType.line);
 //        dw.addSeries(calculator.getLineOptimizedRowExtrapolated(), new int[]{0, 0,255}, "forecast", GraphType.line);
 //        dw.addSeries(calculator.getResultRowExtrapolated(), new int[]{155, 155,0}, "result", GraphType.line);
+//        dw.addSeries(calculator.getLn(), new int[]{55, 0,0}, "LN", GraphType.line);
 
-        dw.addSeries(subtract(calculator.getResultRow(), dr1), new int[]{155, 155,0}, "result", GraphType.line);
+//        dw.addSeries(subtract(calculator.getResultRow(), dr1), new int[]{155, 155,0}, "result", GraphType.line);
+        dw.addSeries(calculator.getLn(), new int[]{255, 0,0}, "ln", GraphType.line);
+        dw.addSeries(calculator.getDiff(), new int[]{0, 0,255}, "diff", GraphType.line);
+        dw.addSeries(calculator.getLnDiff(), new int[]{0, 55,55}, "ln diff", GraphType.line);
+        dw.addSeries(calculator.getTimeRow1(), new int[]{23, 25,150}, "new tr", GraphType.line);
+
         dw.write();
 
         System.out.println("end");

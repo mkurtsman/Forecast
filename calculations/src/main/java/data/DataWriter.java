@@ -41,7 +41,6 @@ public class DataWriter {
             var d = minY + (maxY - minY)*i/(y.length -1);
             y[i] = df.format(d);
         }
-        config.setLabelY(y);
         config.setSeriesList(series);
         FileWriter writer = new FileWriter(filePath);
         new Gson().toJson(config, writer);

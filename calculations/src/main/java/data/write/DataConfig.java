@@ -8,8 +8,6 @@ import java.util.List;
 public class DataConfig {
     @SerializedName("lx")
     private String[] labelX;
-    @SerializedName("ly")
-    private String[] labelY;
     @SerializedName("series")
     private Series[] seriesList;
 
@@ -19,14 +17,6 @@ public class DataConfig {
 
     public void setLabelX(String[] labelX) {
         this.labelX = labelX;
-    }
-
-    public String[] getLabelY() {
-        return labelY;
-    }
-
-    public void setLabelY(String[] labelY) {
-        this.labelY = labelY;
     }
 
     public Series[] getSeriesList() {
