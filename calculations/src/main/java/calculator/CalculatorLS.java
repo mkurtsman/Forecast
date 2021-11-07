@@ -1,22 +1,22 @@
 package calculator;
 
-import main.java.functions.LineFunction;
-import main.java.functions.MovingAverageFunction;
-import main.java.functions.SinFunction;
-import main.java.optimizer.AbstractOptimizer;
-import main.java.optimizer.DichotomyParamFuncOptimizer;
-import main.java.optimizer.Range;
+import functions.LineFunction;
+import functions.MovingAverageFunction;
+import functions.SinFunction;
+import optimizer.AbstractOptimizer;
+import optimizer.DichotomyParamFuncOptimizer;
+import optimizer.Range;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import main.java.timerow.DoubleRow;
+import timerow.DoubleRow;
 
 import java.math.BigDecimal;
 import java.math.MathContext;
 import java.util.List;
 import java.util.stream.IntStream;
 
-import static main.java.timerow.DoubleRowOperations.*;
-import static main.java.timerow.DoubleRowOperations.mutiply;
+import static timerow.DoubleRowOperations.*;
+import static timerow.DoubleRowOperations.mutiply;
 
 public class CalculatorLS {
 

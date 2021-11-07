@@ -1,8 +1,8 @@
 import calculator.LnCalculator;
-import main.java.data.DataLoader;
-import main.java.data.DataWriter;
-import main.java.data.write.GraphType;
-import main.java.timerow.DoubleRow;
+import data.DataLoader;
+import data.DataWriter;
+import data.write.GraphType;
+import timerow.DoubleRow;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
@@ -14,8 +14,8 @@ public class CalcMain {
         DataLoader dataLoader = new DataLoader(path + "/AUDUSD240.csv") ;
         LocalDateTime dt = LocalDateTime.now();
         int week = 0;
-        DoubleRow dr = dataLoader.get(dt.minusWeeks(8), dt);
-        DoubleRow dr1 = dataLoader.get(dt.minusWeeks(8), dt.minusWeeks(1));
+        DoubleRow dr = dataLoader.get(dt.minusYears(1), dt);
+        DoubleRow dr1 = dataLoader.get(dt.minusYears(1), dt);
         LnCalculator calculator = new LnCalculator(dr1, dr.size() - dr1.size());
         calculator.calculate();
 
@@ -29,7 +29,7 @@ public class CalcMain {
 //        dw.addSeries(subtract(calculator.getResultRow(), dr1), new int[]{155, 155,0}, "result", GraphType.line);
         dw.addSeries(calculator.getLn(), new int[]{255, 0,0}, "ln", GraphType.line);
         dw.addSeries(calculator.getDiff(), new int[]{0, 0,255}, "diff", GraphType.line);
-        dw.addSeries(calculator.getLnDiff(), new int[]{0, 55,55}, "ln diff", GraphType.line);
+        dw.addSeries(calculator.getLnInt(), new int[]{0, 55,55}, "ln diff", GraphType.line);
         dw.addSeries(calculator.getTimeRow1(), new int[]{23, 25,150}, "new tr", GraphType.line);
 
         dw.write();
