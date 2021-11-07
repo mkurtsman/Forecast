@@ -99,8 +99,8 @@ public class DoubleRowOperations {
     }
 
     public static  DoubleRow interg(DoubleRow source, DoubleRow diff){
-        Function<Integer, BigDecimal> func = x -> source.get(x).add(diff.get(x+1));
-        Map<Integer, BigDecimal> points = getRange(source.points.firstKey(), source.points.lastKey()).collect(getIntegerMapCollector(func));
+        Function<Integer, BigDecimal> func = x -> source.get(x-1).add(diff.get(x));
+        Map<Integer, BigDecimal> points = getRange(source.points.firstKey()+1, source.points.lastKey()+1).collect(getIntegerMapCollector(func));
         return new DoubleRow(points);
     }
 
