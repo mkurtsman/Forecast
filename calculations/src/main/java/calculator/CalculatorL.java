@@ -1,21 +1,20 @@
 package calculator;
 
-import functions.LineFunction;
-import functions.SinFunction;
-import optimizer.AbstractOptimizer;
-import optimizer.DichotomyParamFuncOptimizer;
-import optimizer.Range;
-import optimizer.SimpleParamFuncOptimizer;
+import main.java.functions.LineFunction;
+import main.java.functions.SinFunction;
+import main.java.optimizer.AbstractOptimizer;
+import main.java.optimizer.DichotomyParamFuncOptimizer;
+import main.java.optimizer.Range;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import timerow.DoubleRow;
+import main.java.timerow.DoubleRow;
 
 import java.math.BigDecimal;
 import java.math.MathContext;
 import java.util.List;
 import java.util.stream.IntStream;
 
-import static timerow.DoubleRowOperations.*;
+import static main.java.timerow.DoubleRowOperations.*;
 
 public class CalculatorL {
 
@@ -61,7 +60,7 @@ public class CalculatorL {
         List<Range> steps = List.of(range, range);
         Double eps = 0.00000001;
         AbstractOptimizer optimizer = new DichotomyParamFuncOptimizer(lineFunction, steps, eps, timeRow);
-//        AbstractOptimizer optimizer = new SimpleParamFuncOptimizer(lineFunction, steps, 1000000, timeRow);
+//        AbstractOptimizer main.java.optimizer = new SimpleParamFuncOptimizer(lineFunction, steps, 1000000, timeRow);
         optimizer.optimize();
 
         lineOptimizedRow = apply(timeRow, lineFunction);

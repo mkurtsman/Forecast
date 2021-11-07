@@ -1,17 +1,11 @@
-import calculator.Calculator;
-import calculator.CalculatorL;
-import calculator.CalculatorLS;
 import calculator.LnCalculator;
-import data.DataLoader;
-import data.DataWriter;
-import data.write.GraphType;
-import timerow.DoubleRow;
+import main.java.data.DataLoader;
+import main.java.data.DataWriter;
+import main.java.data.write.GraphType;
+import main.java.timerow.DoubleRow;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
-import java.time.Month;
-
-import static timerow.DoubleRowOperations.subtract;
 
 public class CalcMain {
     public static void main(String[] args) throws IOException {
