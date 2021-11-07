@@ -49,6 +49,19 @@ public class DoubleRowOperations {
         return new DoubleRow(points);
     }
 
+    public static  DoubleRow add(DoubleRow source, BigDecimal val){
+        Function<Integer, BigDecimal> func = x -> source.get(x).add(val);
+        Map<Integer, BigDecimal> points = getRange(source).collect(getIntegerMapCollector(func));
+        return new DoubleRow(points);
+    }
+
+    public static  DoubleRow subtract(DoubleRow source, BigDecimal val){
+        Function<Integer, BigDecimal> func = x -> source.get(x).subtract(val);
+        Map<Integer, BigDecimal> points = getRange(source).collect(getIntegerMapCollector(func));
+        return new DoubleRow(points);
+    }
+
+
     public static  DoubleRow mutiply(DoubleRow source, BigDecimal multiplyer){
         Function<Integer, BigDecimal> func = x -> source.get(x).multiply(multiplyer);
         Map<Integer, BigDecimal> points = getRange(source).collect(getIntegerMapCollector(func));
@@ -60,7 +73,7 @@ public class DoubleRowOperations {
             throw new RuntimeException("invalid devider");
         }
 
-        Function<Integer, BigDecimal> func = x -> source.get(x).divide(devider);
+        Function<Integer, BigDecimal> func = x -> source.get(x).divide(devider, MathContext.DECIMAL128);
         Map<Integer, BigDecimal> points = getRange(source).collect(getIntegerMapCollector(func));
         return new DoubleRow(points);
     }
@@ -126,16 +139,19 @@ public class DoubleRowOperations {
     }
 
     public static  DoubleRow extrapolate(DoubleRow source, int extrapolationCount, Function<Integer, BigDecimal> function) {
-        Map<Integer, BigDecimal> points = getRange(source.points.size(), source.points.size() + extrapolationCount).collect(getIntegerMapCollector(function));
-        return new DoubleRow(points);
+        Map<Integer, BigDecimal> points = getRange(source.points.size()+1, source.points.size() + 1 + extrapolationCount).collect(getIntegerMapCollector(function));
+        var result = copy(source);
+        result.addPoints(points);
+        return result;
 
     }
 
     public static  DoubleRow extrapolateWithEmpty(DoubleRow source, int extrapolationCount) {
         Function<Integer, BigDecimal> func = x -> BigDecimal.ZERO;
         Map<Integer, BigDecimal> points = getRange(source.points.size(), source.points.size() + extrapolationCount).collect(getIntegerMapCollector(func));
-        return new DoubleRow(points);
-
+        var result = copy(source);
+        result.addPoints(points);
+        return result;
     }
 
     public static BigDecimal minSquare(DoubleRow source, ParametricFunction function) {

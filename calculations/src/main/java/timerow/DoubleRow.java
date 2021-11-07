@@ -71,4 +71,8 @@ public class DoubleRow {
         return points.values();
     }
 
+    public void addPoints(Map<Integer, BigDecimal> map){
+        points.putAll(map);
+    }
+
 }
