@@ -7,9 +7,23 @@
         </encoder>
 </appender>
 
+    <appender name="FILE" class="ch.qos.logback.core.FileAppender">
+        <file>testSin.log</file>
+        <append>true</append>
+        <!-- set immediateFlush to false for much higher logging throughput -->
+        <immediateFlush>true</immediateFlush>
+        <encoder>
+            <pattern>%msg%n</pattern>
+        </encoder>
+    </appender>
+
     <root level="${ROOT_LOG_LEVEL:-DEBUG}">
         <appender-ref ref="CONSOLE"/>
     </root>
+
+    <logger name="CalcMainOptimize" additivity="false" level="info">
+        <appender-ref ref="FILE"/>
+    </logger>
 
 </configuration>
 

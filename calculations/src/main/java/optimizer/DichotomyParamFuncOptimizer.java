@@ -33,12 +33,14 @@ public class DichotomyParamFuncOptimizer implements AbstractOptimizer {
 
     public void optimize() {
         var error = Double.MAX_VALUE;
-        for(int q = 0; q < 20; q++) {
+        int counter = 0;
+        while (error > 0.000000001 && counter < 20){
             for (int i = 0; i < function.getParamsCount(); i++) {
                 optimizeByParam(i);
             }
             error = minSquare(timeRow, function).doubleValue();
-            logger.info("params {} error {}", function.toString(), error);
+            logger.info("iteration {} error {} params {}", counter, error, function.toString());
+            counter++;
         }
 
     }
@@ -67,8 +69,8 @@ public class DichotomyParamFuncOptimizer implements AbstractOptimizer {
                 a = x1;
             }
 
-            logger.debug("param({}) f(x1) = {} x1 = {} f(x2) = {} x2={}, ", i, v1, x1, v2, x2);
-            logger.debug("param({}) a = {} b = {} ", i, a, b);
+//            logger.debug("param({}) f(x1) = {} x1 = {} f(x2) = {} x2={}, ", i, v1, x1, v2, x2);
+//            logger.debug("param({}) a = {} b = {} ", i, a, b);
         }
 
 

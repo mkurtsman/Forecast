@@ -23,4 +23,9 @@ public class DataRowFactory {
         var map = Map.of(0, BigDecimal.valueOf(23.4), 1, BigDecimal.valueOf(1.4), 2, BigDecimal.valueOf(43.1));
         return new DoubleRow(map);
     }
+
+    public static DoubleRow getMADoubleRow(){
+        var map = IntStream.range(1, 11).boxed().collect(Collectors.toMap(Function.identity(), i -> BigDecimal.valueOf(i)));
+        return new DoubleRow(map);
+    }
 }

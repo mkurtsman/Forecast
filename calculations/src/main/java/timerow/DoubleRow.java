@@ -75,4 +75,8 @@ public class DoubleRow {
         points.putAll(map);
     }
 
+    public  int maxX(){
+        return points.lastKey();
+    }
+
 }

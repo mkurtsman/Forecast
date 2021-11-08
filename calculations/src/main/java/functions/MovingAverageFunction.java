@@ -26,10 +26,15 @@ public class MovingAverageFunction extends ParametricFunction{
 
     private BigDecimal getValue(Integer x) {
         int order = params.size();
+        if(x < order){
+            return timeRow.get(x);
+        }
+
         BigDecimal sum = params.get(0);
         for(int i = 1 ; i < order; i++ ){
-            sum = sum.add(params.get(i).multiply(BigDecimal.valueOf(x - i)));
+            sum = sum.add(params.get(i).multiply( timeRow.get(x - 1)));
         }
+
         return sum;
     }
 

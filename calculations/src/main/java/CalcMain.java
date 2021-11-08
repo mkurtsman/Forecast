@@ -15,8 +15,8 @@ public class CalcMain {
         LocalDateTime dt = LocalDateTime.now();
         int week = 0;
         DoubleRow dr = dataLoader.get(dt.minusYears(1), dt);
-        DoubleRow dr1 = dataLoader.get(dt.minusYears(1), dt);
-        LnCalculator calculator = new LnCalculator(dr1, dr.size() - dr1.size());
+        DoubleRow dr1 = dataLoader.get(dt.minusYears(1), dt.minusWeeks(0));
+        LnCalculator calculator = new LnCalculator(dr1);
         calculator.calculate();
 
         DataWriter dw = new DataWriter( path + "/AUDUSD240.json");
@@ -29,10 +29,10 @@ public class CalcMain {
 //        dw.addSeries(subtract(calculator.getResultRow(), dr1), new int[]{155, 155,0}, "result", GraphType.line);
         dw.addSeries(calculator.getLn(), new int[]{255, 0,0}, "ln", GraphType.line);
         dw.addSeries(calculator.getDiff(), new int[]{0, 0,255}, "diff", GraphType.line);
-        dw.addSeries(calculator.getCyclicOptimizedRow(), new int[]{33, 33,133}, "cyclic", GraphType.line);
+        dw.addSeries(calculator.getCyclicOptimizedRow(), new int[]{33, 33,133}, "cyclic", GraphType.dot);
 
         dw.addSeries(calculator.getLnInt(), new int[]{0, 55,55}, "ln diff", GraphType.line);
-        dw.addSeries(calculator.getTimeRow1(), new int[]{23, 25,150}, "new tr", GraphType.line);
+        dw.addSeries(calculator.getTimeRow1(), new int[]{23, 25,150}, "new tr", GraphType.dot);
 
         dw.write();
 
