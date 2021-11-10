@@ -10,13 +10,13 @@ import java.time.LocalDateTime;
 public class CalcMain {
     public static void main(String[] args) throws IOException {
 
-        var path = /*"C:/work/Forecast/calculations/src/main/resources/AUDUSD240.csv" */"/home/misha/IdeaProjects/Forecast/calculations/src/main/resources";
+        var path = "C:/work/Forecast/calculations/src/main/resources" /*"/home/misha/IdeaProjects/Forecast/calculations/src/main/resources"*/;
         DataLoader dataLoader = new DataLoader(path + "/AUDUSD240.csv") ;
         LocalDateTime dt = LocalDateTime.now();
         int week = 0;
         DoubleRow dr = dataLoader.get(dt.minusYears(1), dt);
         DoubleRow dr1 = dataLoader.get(dt.minusYears(1), dt.minusWeeks(0));
-        LnCalculator calculator = new LnCalculator(dr1);
+        LnCalculator calculator = new LnCalculator(dr1, 50, 2.1);
         calculator.calculate();
 
         DataWriter dw = new DataWriter( path + "/AUDUSD240.json");

@@ -156,7 +156,7 @@ public class DoubleRowOperations {
 
     public static BigDecimal minSquare(DoubleRow source, ParametricFunction function) {
         BigDecimal sum = getRange(source).map(i -> source.get(i).subtract(function.apply(i)).pow(2)).reduce((a, b) -> a.add(b) ).orElse(BigDecimal.ZERO);
-        return sum.sqrt(MathContext.DECIMAL128).divide(BigDecimal.valueOf(source.size()), MathContext.DECIMAL128);
+        return sum.divide(BigDecimal.valueOf(source.size()), MathContext.DECIMAL128).sqrt(MathContext.DECIMAL128);
     }
 
     public static BigDecimal minSquare(DoubleRow source, DoubleRow row) {

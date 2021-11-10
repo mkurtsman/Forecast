@@ -4,6 +4,9 @@ import timerow.DoubleRow;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Map;
+
+import static timerow.DoubleRowOperations.copy;
 
 public class MovingAverageFunction extends ParametricFunction{
 
@@ -28,7 +31,12 @@ public class MovingAverageFunction extends ParametricFunction{
         int order = params.size();
         BigDecimal sum = params.get(0);
         for(int i = 1 ; i < order; i++ ){
-            sum = sum.add(params.get(i).multiply( timeRow.get(x - i)));
+            var size = timeRow.size();
+            sum = sum.add(params.get(i).multiply(timeRow.get(x - i)));
+        }
+
+        if(x > timeRow.size()) {
+            timeRow.addPoints(Map.of(x , sum) );
         }
 
         return sum;

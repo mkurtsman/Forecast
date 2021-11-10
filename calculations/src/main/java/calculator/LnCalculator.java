@@ -1,5 +1,6 @@
 package calculator;
 
+import functions.MovingAverageFunction;
 import functions.SinFunction;
 import optimizer.AbstractOptimizer;
 import optimizer.DichotomyParamFuncOptimizer;
@@ -32,7 +33,7 @@ public class LnCalculator {
     private double phase; // normalizedDiff.size()*2
 
     public LnCalculator(DoubleRow timeRow) {
-        this(timeRow, 5, 2.1);
+        this(timeRow, 50, 2.1);
     }
 
     public LnCalculator(DoubleRow timeRow, int sinOrder, double phase) {
@@ -55,7 +56,7 @@ public class LnCalculator {
         List<BigDecimal> sinParams = IntStream.range(0, sinOrder).mapToObj(i -> BigDecimal.ONE.divide(BigDecimal.valueOf(sinOrder), MathContext.DECIMAL128)).toList();
         List<Range> sinSteps = IntStream.range(0, sinOrder).mapToObj(i -> Range.of(-1.0, 1.0)).toList();
 
-        var sinFunction = new SinFunction((int) (normalizedDiff.size()*phase), sinParams);
+        var sinFunction = new MovingAverageFunction(normalizedDiff,sinParams); // new SinFunction((int) (normalizedDiff.size()*phase), sinParams);
 
         Double sinEps = 0.0000001;
         AbstractOptimizer cyclicOptimizer = new DichotomyParamFuncOptimizer(sinFunction, sinSteps, sinEps, normalizedDiff);
