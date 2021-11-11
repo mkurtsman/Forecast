@@ -14,13 +14,13 @@ public class CalcMain {
         DataLoader dataLoader = new DataLoader(path + "/AUDUSD240.csv") ;
         LocalDateTime dt = LocalDateTime.now();
         int week = 0;
-        DoubleRow dr = dataLoader.get(dt.minusYears(1), dt);
-        DoubleRow dr1 = dataLoader.get(dt.minusYears(1), dt.minusWeeks(0));
-        LnCalculator calculator = new LnCalculator(dr1, 50, 2.1);
+        DoubleRow dr = dataLoader.get(dt.minusYears(1).minusWeeks(1), dt);
+        DoubleRow dr1 = dataLoader.get(dt.minusYears(1).minusWeeks(1), dt.minusWeeks(1));
+        LnCalculator calculator = new LnCalculator(dr1);
         calculator.calculate();
 
         DataWriter dw = new DataWriter( path + "/AUDUSD240.json");
-        dw.addSeries(dr, new int[]{155, 155,23}, "init", GraphType.line);
+        dw.addSeries(dr1, new int[]{155, 155,23}, "init", GraphType.line);
 //        dw.addSeries(dr1, new int[]{255, 0,0}, "init", GraphType.line);
 //        dw.addSeries(calculator.getLineOptimizedRowExtrapolated(), new int[]{0, 0,255}, "forecast", GraphType.line);
 //        dw.addSeries(calculator.getResultRowExtrapolated(), new int[]{155, 155,0}, "result", GraphType.line);

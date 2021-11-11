@@ -20,6 +20,7 @@ import static timerow.DoubleRowOperations.*;
 
 public class LnCalculator {
 
+    public static final int EXTRAPOLATION_COUNT = 2;
     private static Logger log = LoggerFactory.getLogger(LnCalculator.class);
 
     private final DoubleRow timeRow;
@@ -62,24 +63,27 @@ public class LnCalculator {
         AbstractOptimizer cyclicOptimizer = new DichotomyParamFuncOptimizer(sinFunction, sinSteps, sinEps, normalizedDiff);
         cyclicOptimizer.optimize();
         cyclicOptimizedRow = apply(normalizedDiff,sinFunction);
-        cyclicOptimizedRow = extrapolate(cyclicOptimizedRow, 2, sinFunction);
+        cyclicOptimizedRow = extrapolate(cyclicOptimizedRow, EXTRAPOLATION_COUNT, sinFunction);
         cyclicOptimizedRow = add(mutiply(cyclicOptimizedRow, max.subtract(min).divide(TWO)), center);
 
         ///////////////
 
         lnInt = DoubleRowOperations.interg(ln, cyclicOptimizedRow);
+
+        var idx =  timeRow.size();
+        for(int i = 0; i < EXTRAPOLATION_COUNT; i++) {
+            BigDecimal expected = lnInt.get(idx + i - 1).add(cyclicOptimizedRow.get(idx + i ));
+            lnInt.addPoints(Map.of(idx + i, expected));
+        }
+
+
         timeRow1 = exp(lnInt);
-        error = minSquare(subRow(timeRow, 1), timeRow1).doubleValue();
+        error = minSquare(subRow(timeRow, 1), subRow(timeRow1, 1, timeRow.maxX())).doubleValue();
 
-        var idx =  timeRow1.maxX();
-        BigDecimal expected = timeRow1.get(idx).add(cyclicOptimizedRow.get(idx + 1));
-        timeRow1.addPoints(Map.of(idx +1 , expected));
-        log.info(" expected value1 {}", expected);
+        for(int i = 0; i < EXTRAPOLATION_COUNT; i++) {
+            log.info(" expected value{} {}", i, timeRow1.get(idx + i));
+        }
 
-        idx++;
-        expected = timeRow1.get(idx).add(cyclicOptimizedRow.get(idx + 1));
-        timeRow1.addPoints(Map.of(idx +1 , expected));
-        log.info(" expected value2 {}", expected);
 
 
     }

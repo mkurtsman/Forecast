@@ -50,9 +50,7 @@ public class DataLoader {
         SortedMap<LocalDateTime, Model> models = getModelList().subMap(from, to);
         SortedMap<Integer, BigDecimal> result = new TreeMap<>();
         AtomicInteger ai = new AtomicInteger(0);
-        models.forEach((k , v) ->{
-          result.put(ai.getAndIncrement(), BigDecimal.valueOf(v.getClose()));
-        });
+        models.forEach((k , v) -> result.put(ai.getAndIncrement(), BigDecimal.valueOf(v.getClose())));
         return new DoubleRow(result);
     }
 

@@ -93,6 +93,15 @@ public class DoubleRowOperations {
         return new DoubleRow(points);
     }
 
+    public static  DoubleRow subRow(DoubleRow source, int from, int to){
+        if(source.points.firstKey() > from){
+            throw new RuntimeException("incorrect from parameter");
+        }
+        Function<Integer, BigDecimal> func = x -> source.get(x);
+        Map<Integer, BigDecimal> points = getRange(from, to + 1).collect(getIntegerMapCollector(func));
+        return new DoubleRow(points);
+    }
+
     public static  DoubleRow apply(DoubleRow source, ParametricFunction function){
         Function<Integer, BigDecimal> func = x -> function.apply(x);
         Map<Integer, BigDecimal> points = getRange(source).collect(getIntegerMapCollector(func));

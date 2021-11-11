@@ -2,7 +2,7 @@ package functions;
 
 import data.DataRowFactory;
 import org.junit.jupiter.api.Test;
-import timerow.DoubleRow;
+
 import timerow.DoubleRowOperations;
 
 import java.math.BigDecimal;
